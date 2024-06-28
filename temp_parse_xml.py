@@ -1,4 +1,11 @@
 from bs4 import BeautifulSoup
+import datetime as dt
+import os
+import requests
+import shutil
+
+import settings
+
 
 with open("PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.xml", "r", encoding="utf-8") as f:
     playlist_xml = f.read()
@@ -6,7 +13,24 @@ with open("PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.xml", "r", encoding="utf-8") as f:
 with open("PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.html", "r", encoding="utf-8") as f:
     playlist_html = f.read()
 
+playlist_url = "https://www.youtube.com/playlist?list=PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f"
 playlist_id = "PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f"
+# будет передан из базы данных при добавлении плейлиста
+language = 2
+# 1 - ru-ru, 2 - en-us, 3 - es ...
+
+user_id = 1  # будет передан из базы данных при добавлении плейлиста
+feed_id = 1  # будет передан из базы данных при добавлении плейлиста
+
+
+def image_download(image_url, image_name):
+    os.makedirs("img", exist_ok=True)
+    image_content = requests.get(image_url, stream=True)
+    image_path = os.path.join('img', image_name + '.jpg')
+    with open(image_path, 'wb') as image_file:
+        shutil.copyfileobj(image_content.raw, image_file)
+    return image_path
+
 
 fields_for_db = []
 
@@ -15,15 +39,16 @@ soup_xml = BeautifulSoup(playlist_xml, "xml")
 all_items = soup_xml.findAll("entry")
 
 # Fields for feed
-db_feed_id = "ADD WHEN ADDING TO THE DATABASE"
-db_user_id = "ADD WHEN ADDING TO THE DATABASE"
+db_feed_id = feed_id  # будет передан из базы данных при добавлении плейлиста
+db_user_id = user_id  # будет передан из базы данных при добавлении плейлиста
 feed_title = soup_html.find("meta", property="og:title")['content']
-feed_link = "https://www.youtube.com/playlist?list=PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f"
-db_language = "ADD WHEN ADDING TO THE DATABASE"
+feed_link = playlist_url
+db_language = language
 feed_description = soup_html.find("meta", property="og:description")['content']
-feed_pubDate = "TODO"
-lastBuildDate = "TODO"
-feed_image = "IT WILL BE THE SAME STATIC IMAGE FOR ALL FEEDS"
+feed_pubDate = soup_xml.find("published").text
+feed_pubDate = dt.datetime.strptime(feed_pubDate, settings.TIME_FORMAT_YOUTUBE)
+lastBuildDate = dt.datetime.now(tz=dt.timezone.utc)
+feed_image = settings.ARTWORK_PATH
 
 feed_fields_for_db = dict(
     id=db_feed_id,
@@ -39,22 +64,22 @@ feed_fields_for_db = dict(
 
 fields_for_db.append(feed_fields_for_db)
 
-
+# Fields for podcast
 for item in all_items:
-    db_podcast_id = "ADD WHEN ADDING TO THE DATABASE"
-    feed_id = "ADD WHEN ADDING TO THE DATABASE"
+    feed_id = db_feed_id  # будет передан из базы данных при добавлении плейлиста
     ytb_podcast_id = item.find("yt:videoId").text
     podcast_title = item.find("title").text
     ytb_link = item.find("link")["href"]
     ytb_description = item.find("description").text
     enclosure = "TODO"
     guid = playlist_id + '::' + ytb_podcast_id
-    pubDate = "TODO"
+    pubDate = item.find("published").text
+    pubDate = dt.datetime.strptime(pubDate, settings.TIME_FORMAT_YOUTUBE)
     ytb_author = item.find("author").text.strip()
     duration = "TODO"
     ytb_image = item.find("thumbnail")["url"]
+    ytb_image = image_download(ytb_image, ytb_podcast_id)
     podcast_fields_for_db = dict(
-        id=db_podcast_id,
         feed_id=feed_id,
         ytb_podcast_id=ytb_podcast_id,
         podcast_title=podcast_title,

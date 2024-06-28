@@ -32,14 +32,14 @@ def get_html_from_youtube(url):
         return None
 
 
-def write_to_file(html, html_id, suffix):
-    filename = html_id + suffix
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(html)
-        print(f"Файл {f.name} записан")
-
-
 if __name__ == "__main__":
+    def write_to_file(html, html_id, suffix):
+        filename = html_id + suffix
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(html)
+            print(f"Файл {f.name} записан")
+
+
     playlist_url = "https://www.youtube.com/playlist?list=PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f"
     playlist_xml, playlist_html, list_id = get_html_from_youtube(playlist_url)
     if playlist_xml:
