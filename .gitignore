@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 img/
+podcasts/
 PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.xml
 PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.html
 # C extensions
@@ -13,7 +14,6 @@ PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.html
 build/
 develop-eggs/
 dist/
-downloads/
 eggs/
 .eggs/
 lib/

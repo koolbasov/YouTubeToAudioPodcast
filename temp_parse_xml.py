@@ -5,6 +5,7 @@ import requests
 import shutil
 
 import settings
+import converter_mp3
 
 
 with open("PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.xml", "r", encoding="utf-8") as f:
@@ -71,12 +72,12 @@ for item in all_items:
     podcast_title = item.find("title").text
     ytb_link = item.find("link")["href"]
     ytb_description = item.find("description").text
-    enclosure = "TODO"
     guid = playlist_id + '::' + ytb_podcast_id
     pubDate = item.find("published").text
     pubDate = dt.datetime.strptime(pubDate, settings.TIME_FORMAT_YOUTUBE)
     ytb_author = item.find("author").text.strip()
-    duration = "TODO"
+    duration, enclosure = converter_mp3.download_and_convert_podcast(
+        ytb_link, ytb_podcast_id, feed_title)
     ytb_image = item.find("thumbnail")["url"]
     ytb_image = image_download(ytb_image, ytb_podcast_id)
     podcast_fields_for_db = dict(
