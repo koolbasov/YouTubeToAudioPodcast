@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class Feed(db.Model):
     __tablename__ = 'feed'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     feed_title = db.Column(db.String, nullable=False)
     feed_link = db.Column(db.String, unique=True, nullable=False)
     lang_id = db.Column(db.Integer, db.ForeignKey('languages.id'))
@@ -53,6 +53,7 @@ class Language(db.Model):
     __tablename__ = 'languages'
     id = db.Column(db.Integer, primary_key=True)
     language = db.Column(db.String, nullable=False)
+    language_name = db.Column(db.String, nullable=False)
 
     def __repr__(self):
         return '<Language {}>'.format(self.language)
