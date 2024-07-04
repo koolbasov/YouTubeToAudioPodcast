@@ -1,11 +1,15 @@
 from flask import Flask
 
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return "Youtube to RSS"
+from webapp.models import db
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_pyfile('config.py')
+    db.init_app(app)
+
+    @app.route('/')
+    def index():
+        return "Youtube to RSS"
+
+    return app
