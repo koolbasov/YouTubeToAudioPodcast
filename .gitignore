@@ -2,8 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
-img/
-podcasts/
+webapp/img/
+webapp/podcasts/
 PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.xml
 PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.html
 # C extensions
