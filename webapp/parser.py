@@ -4,7 +4,7 @@ import os
 import requests
 import shutil
 
-import settings
+import config
 import converter_mp3
 from yt_dlp.utils import DownloadError
 
@@ -34,9 +34,9 @@ def parse_fields_for_data_base(
     db_language = language
     feed_description = soup_html.find("meta", property="og:description")['content']
     feed_pubDate = soup_xml.find("published").text
-    feed_pubDate = dt.datetime.strptime(feed_pubDate, settings.TIME_FORMAT_YOUTUBE)
+    feed_pubDate = dt.datetime.strptime(feed_pubDate, config.TIME_FORMAT_YOUTUBE)
     lastBuildDate = dt.datetime.now(tz=dt.timezone.utc)
-    feed_image = settings.ARTWORK_PATH
+    feed_image = config.ARTWORK_PATH
 
     feed_fields_for_db = dict(
         id=db_feed_id,
@@ -61,7 +61,7 @@ def parse_fields_for_data_base(
         ytb_description = item.find("description").text
         guid = playlist_id + '::' + ytb_podcast_id
         pubDate = item.find("published").text
-        pubDate = dt.datetime.strptime(pubDate, settings.TIME_FORMAT_YOUTUBE)
+        pubDate = dt.datetime.strptime(pubDate, config.TIME_FORMAT_YOUTUBE)
         ytb_author = item.find("author").text.strip()
         try:
             duration, enclosure = converter_mp3.download_and_convert_podcast(
