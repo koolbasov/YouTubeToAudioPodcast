@@ -53,7 +53,7 @@ class Language(db.Model):
     __tablename__ = 'languages'
     id = db.Column(db.Integer, primary_key=True)
     language = db.Column(db.String, nullable=False)
-    language_name = db.Column(db.String, nullable=False)
+    identifier = db.Column(db.String, unique=True, nullable=False)
 
     def __repr__(self):
         return '<Language {}>'.format(self.language)
