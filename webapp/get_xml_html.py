@@ -1,6 +1,6 @@
 import requests
 
-import settings
+import config
 
 
 def check_is_playlist(url):
@@ -18,7 +18,7 @@ def get_html_from_youtube(url):
         print("Это не youtube плейлист")
         return None
     url_id = url.split("list=")[1]
-    playlist_rss = settings.RSS_TEMPLATE + url_id
+    playlist_rss = config.RSS_TEMPLATE + url_id
     try:
         response_html = requests.get(url)
         response_xml = requests.get(playlist_rss)
