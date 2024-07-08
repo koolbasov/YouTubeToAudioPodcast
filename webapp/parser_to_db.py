@@ -13,7 +13,11 @@ from models import db, Feed, Podcast
 
 def image_download(image_url, image_name):
     os.makedirs("img", exist_ok=True)
-    image_content = requests.get(image_url, stream=True)
+    headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                             "AppleWebKit/537.36 (KHTML, like Gecko) "
+                             "Chrome/126.0.0.0 Safari/537.36"
+               }
+    image_content = requests.get(image_url, headers=headers, stream=True)
     image_path = os.path.join('img', image_name + '.jpg')
     with open(image_path, 'wb') as image_file:
         shutil.copyfileobj(image_content.raw, image_file)
@@ -42,7 +46,6 @@ def parse_fields_for_data_base(
         db_user_id, feed_title, feed_link,
         db_language, feed_description,
         feed_pubDate, lastBuildDate, feed_image)
-
 
     # Fields for podcast
     for item in all_items_xml:

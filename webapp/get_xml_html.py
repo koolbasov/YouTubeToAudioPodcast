@@ -19,8 +19,12 @@ def get_html_from_youtube(url):
         return None
     url_id = url.split("list=")[1]
     playlist_rss = config.RSS_TEMPLATE + url_id
+    headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                             "AppleWebKit/537.36 (KHTML, like Gecko) "
+                             "Chrome/126.0.0.0 Safari/537.36"
+               }
     try:
-        response_html = requests.get(url)
+        response_html = requests.get(url, headers=headers)
         response_xml = requests.get(playlist_rss)
         if response_xml.status_code == 200:
             return response_xml.text, response_html.text, url_id
