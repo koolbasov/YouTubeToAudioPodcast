@@ -8,3 +8,5 @@ ARTWORK_PATH = "youtubetopodcast-cover.jpg"
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '..', 'webapp.db')
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+SECRET_KEY = "dh73920du2u02hfksjnfjsfh!@"

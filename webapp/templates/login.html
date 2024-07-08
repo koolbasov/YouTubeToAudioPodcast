@@ -14,33 +14,31 @@
   </body>
 </html>
 
-<header class="p-3 bg-dark text-white">
+    <title>{{ page_title }}</title>
     <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-        </a>
-        <span class="fs-4">{{ page_title }}</span>
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></ul>
-          <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">ВХОД</button>
-          <button type="button" class="btn btn-outline-warning">РЕГИСТРАЦИЯ</button>
-        </div>
-      </div>
-
-<form>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Логин</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-  </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Пароль</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-    <button type="submit" class="btn btn-warning">Отправить</button>
-
-</form>
-<form class="form-floating">
-  <input type="email" class="form-control is-invalid" id="floatingInputInvalid" placeholder="name@example.com" value="test@example.com">
-  <label for="floatingInputInvalid">Неверный Ввод</label>
-</form>
+    <h1> {{page_title }}</h1>
+    <div class="row">
+        <div class="col-4">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+            <form action="{{ url_for('process_login') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="from-group">
+                    {{ form.username.label }}
+                    {{ form.username() }}
+                </div>
+                <div class="from-group">
+                    {{ form.password.label }}
+                    {{ form.password() }}
+                </div>
+                {{ form.submit }}
+            </form>
+    </div>
+        <div class="col-4"></div>
