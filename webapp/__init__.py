@@ -4,6 +4,7 @@ from flask_login import LoginManager, login_user, logout_user
 from webapp.models import db, User
 from webapp.forms import LoginForm
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_pyfile('config.py')
