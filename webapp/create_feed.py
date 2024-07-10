@@ -1,29 +1,44 @@
+from flask import Flask
 from feedgen.feed import FeedGenerator
-import datetime
+import pytz
 
-fg = FeedGenerator()
-fe = fg.add_entry()
-fe.load_extension('podcast')
-fg.load_extension('podcast')
+from models import db, Feed, Podcast, Language
 
-fg.title('YoutubToRSSforTests')
-fg.language('en')
-fg.link(href='/webapp/rss.xml')
-fg.description("Lorem Ipsum is simply dummy ")
-fg.pubDate(datetime.datetime(2024, 6, 20, 12, 32, 49, tzinfo=datetime.timezone.utc))
-fg.lastBuildDate(datetime.datetime(2024, 7, 10, 7, 49, 41, 799575, tzinfo=datetime.timezone.utc))
-fg.podcast.itunes_image('webapp/youtubetopodcast-cover.jpg')
-fg.podcast.itunes_author('YoutubToRSSforTests')
-fg.podcast.itunes_explicit('no')
+app = Flask(__name__)
+app.config.from_pyfile('config.py')
+db.init_app(app)
+
+id = 1
+with app.app_context():
+    fg = FeedGenerator()
+    fe = fg.add_entry()
+    fe.load_extension('podcast')
+    fg.load_extension('podcast')
+
+    my_feed = Feed.query.filter(Feed.id == id).first()
+    fg.title(my_feed.feed_title)
+    lang = Language.query.filter(Language.id == my_feed.lang_id).first()
+    fg.language(lang.identifier)
+    fg.link(href=f'/webapp/{my_feed.feed_title}_{my_feed.id}.xml')
+    fg.description(my_feed.feed_description)
+    fg.pubDate(my_feed.feed_pubDate.replace(tzinfo=pytz.UTC))
+    fg.lastBuildDate(my_feed.lastBuildDate.replace(tzinfo=pytz.UTC))
+    fg.podcast.itunes_image(my_feed.feed_image)
+    fg.podcast.itunes_author('Made by YoutubeToAudioPodcast')
+    fg.podcast.itunes_explicit('no')
 
 
-fe.title('5 Great beginner Python Projects')
-fe.link(href='https://www.youtube.com/watch?v=SrSl6T1My00')
-fe.description("Sponsored by Kite")
-fe.enclosure(url="webapp/podcasts/SrSl6T1My00.mp3", length="410.784", type="audio/mpeg")
-fe.guid('PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f::SrSl6T1My00')
-fe.pubDate(datetime.datetime(2020, 3, 13, 15, 42, 4, tzinfo=datetime.timezone.utc))
-fe.author({'name': 'https://www.youtube.com/channel/UC68KSmHePPePCjW4v57VPQg', 'email': 'Python Programmer'})
-fe.podcast.itunes_duration(int(410.784))
+    my_feed_podcasts = Podcast.query.filter(Podcast.feed_id == my_feed.id).all()
+    for podcast in my_feed_podcasts:
+        fe.title(podcast.podcast_title)
+        fe.link(href=podcast.ytb_link)
+        fe.description(podcast.ytb_description)
+        fe.enclosure(url=podcast.enclosure, length=podcast.duration, type="audio/mpeg")
+        fe.guid(podcast.guid)
+        fe.pubDate(podcast.pubDate.replace(tzinfo=pytz.UTC))
+        email, author = podcast.ytb_author.split('\n')
+        fe.author({'name': author, 'email': email})
+        fe.podcast.itunes_duration(podcast.duration)
 
-fg.rss_file('rss.xml')
+        fg.rss_file(f'{my_feed.feed_title}_{my_feed.id}.xml')
+
