@@ -30,10 +30,10 @@ def download_and_convert_podcast(
             metatag['album'] = feed_title
             metatag.save()
             audio = MP3(mp3_path)
-            duration = audio.info.length
+            duration = int(audio.info.length)
         else:
             audio = MP3(mp3_path)
-            duration = audio.info.length
+            duration = int(audio.info.length)
     return duration, mp3_path
 
 

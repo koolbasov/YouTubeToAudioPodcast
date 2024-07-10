@@ -61,7 +61,7 @@ def parse_fields_for_data_base(
             duration, enclosure = converter_mp3.download_and_convert_podcast(
                 ytb_link, ytb_podcast_id, feed_title)
         except DownloadError:
-            duration = 0.0
+            duration = 0
             enclosure = None
         ytb_image = item.find("thumbnail")["url"]
         ytb_image = image_download(ytb_image, ytb_podcast_id)

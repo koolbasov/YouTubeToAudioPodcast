@@ -32,7 +32,7 @@ class Podcast(db.Model):
     guid = db.Column(db.String, nullable=False)
     pubDate = db.Column(db.DateTime, nullable=False)
     ytb_author = db.Column(db.String, nullable=False)
-    duration = db.Column(db.FLOAT, nullable=False)
+    duration = db.Column(db.Integer, nullable=False)
     ytb_image = db.Column(db.String, nullable=False)
 
     def __repr__(self):
