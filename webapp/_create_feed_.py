@@ -1,9 +1,13 @@
-import os
+from flask import Flask
 from feedgen.feed import FeedGenerator
 import pytz
 
-from webapp.models import Feed, Podcast, Language
-from webapp import config
+from models import db, Feed, Podcast, Language
+import config
+
+app = Flask(__name__)
+app.config.from_pyfile('config.py')
+db.init_app(app)
 
 
 def feed_generator(id=1):
@@ -22,6 +26,7 @@ def feed_generator(id=1):
     fg.podcast.itunes_author('Made by YoutubeToAudioPodcast')
     fg.podcast.itunes_explicit('no')
 
+    # fe.load_extension('podcast')
     my_feed_podcasts = Podcast.query.filter(Podcast.feed_id == my_feed.id).all()
     for podcast in my_feed_podcasts:
         fe = fg.add_entry()
@@ -37,6 +42,11 @@ def feed_generator(id=1):
 
     fg.rss_str(pretty=False)
     filename = f"{my_feed.feed_title}_{my_feed.id}.xml"
-    filepath = os.path.join(config.basedir, f"rss/{filename}")
+    filepath = f"rss/{my_feed.feed_title}_{my_feed.id}.xml"
     fg.rss_file(filepath)
     return filename
+
+
+if __name__ == "__main__":
+    with app.app_context():
+        feed_generator()
