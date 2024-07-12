@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
