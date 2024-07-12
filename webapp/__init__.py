@@ -1,4 +1,4 @@
-import os.path
+import os
 
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
@@ -9,7 +9,7 @@ from webapp.create_feed import feed_generator
 
 
 def create_app():
-    app = Flask(__name__, static_folder='rss')
+    app = Flask(__name__, static_folder='static')
     app.config.from_pyfile('config.py')
     db.init_app(app)
 
@@ -60,10 +60,14 @@ def create_app():
         else:
             return 'У вас нет прав администратора'
 
-    @app.route('/rss', methods=['GET', 'POST'])
+    @app.route('/rss')
     def rss_file():
-        filename = feed_generator()
-        filepath = f'/rss/{filename}'
-        return render_template('rss.html', rss_file=filepath)
+        filename1 = feed_generator(1)
+        filename2 = feed_generator(2)
+        filepath1 = f'static/rss/{filename1}'
+        filepath2 = f'static/rss/{filename2}'
+        return render_template(
+            'rss.html', rss_file1=filepath1,
+            rss_file2=filepath2)
 
     return app

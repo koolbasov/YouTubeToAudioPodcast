@@ -7,11 +7,12 @@ import os
 def download_and_convert_podcast(
         video_url, video_id, feed_title, genre="Podcast"):
     mp3_name = video_id + ".mp3"
-    mp3_path = f'podcasts/{mp3_name}'
+    download_path = os.path.join("static", "podcasts")
+    mp3_path = os.path.join(download_path, mp3_name)
     download_options = {
         "quiet": True,
         'format': 'bestaudio/best',
-        'outtmpl': f'podcasts/{video_id}',
+        'outtmpl': os.path.join(download_path, video_id),
         'nocheckcertificate': True,
         'addmetadata': True,
         'postprocessors': [{
@@ -34,7 +35,7 @@ def download_and_convert_podcast(
         else:
             audio = MP3(mp3_path)
             duration = int(audio.info.length)
-    return duration, mp3_path
+    return duration, mp3_name
 
 
 if __name__ == '__main__':
