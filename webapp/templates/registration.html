@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-4 position-absolute top-50 start-50 translate-middle">
             <h2 class="text-center">
-            ВОЙТИ</h2>
+            РЕГИСТРАЦИЯ</h2>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                 <div class="alert alert-warning" role="alert">
@@ -14,19 +14,23 @@
                 </div>
                 {% endif %}
             {% endwith %}
-            <form action="{{ url_for('process_login') }}" method="POST">
+            <form action="{{ url_for('process_reg') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="from-group">
                     {{ form.username.label }}
                     {{ form.username() }}
                 </div>
                 <div class="from-group">
+                    {{ form.email.label }}
+                    {{ form.email() }}
+                </div>
+                <div class="from-group">
                     {{ form.password.label }}
                     {{ form.password() }}
                 </div>
-                <div class="form-group form-check">
-                    {{ form.remember_me() }}
-                    {{ form.remember_me.label(class_='form-check-label') }}
+                <div class="from-group">
+                    {{ form.password2.label }}
+                    {{ form.password2() }}
                 </div>
                 {{ form.submit }}
             </form>

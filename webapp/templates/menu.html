@@ -1,41 +1,29 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+<nav class="navbar navbar-expand-lg navbar-dark ">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">YouTubeToAudioPodcast</a>
+    <a class="navbar-brand position-absolute top-0 start-50 translate-middle-x fs-2" href="{{ url_for('index') }}">YouTubeToAudioPodcast</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          {% if current_user.is_authenticated %}
+          <a class="btn btn-outline-light me-2" href="{{ url_for('logout') }}" role="button">ВЫЙТИ</a>
+          {% else %}
+          <a class="btn btn-outline-light me-2" href="{{ url_for('login') }}" role="button">ВОЙТИ</a>
+           {% endif %}
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('login') }}">ВХОД</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">РЕГИСТРАЦИЯ</a>
+          <a class="btn btn-warning" href="{{ url_for('register') }}" role="button">РЕГИСТРАЦИЯ</a>
         </li>
       </ul>
 
     </div>
 </nav>
 
-<header class="p-3 bg-dark text-white">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-        </a>
-        <span class="fs-4">{{ page_title }}</span>
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></ul>
 
-          <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">ВХОД</button>
-          <button type="button" class="btn btn-warning">РЕГИСТРАЦИЯ</button>
-        </div>
-      </div>
-    </div>
-  </header>
 
 
