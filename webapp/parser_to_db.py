@@ -3,25 +3,26 @@ import datetime as dt
 import os
 import requests
 import shutil
+from yt_dlp.utils import DownloadError
 
 import config
 import converter_mp3
-from yt_dlp.utils import DownloadError
-
 from models import db, Feed, Podcast
 
 
-def image_download(image_url, image_name):
-    os.makedirs("img", exist_ok=True)
+def image_download(image_url, image_prefix):
+    image_folder = os.path.join("static", "img")
+    os.makedirs(image_folder, exist_ok=True)
     headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                              "AppleWebKit/537.36 (KHTML, like Gecko) "
                              "Chrome/126.0.0.0 Safari/537.36"
                }
     image_content = requests.get(image_url, headers=headers, stream=True)
-    image_path = os.path.join('img', image_name + '.jpg')
+    image_name = image_prefix + ".jpg"
+    image_path = os.path.join(image_folder, image_name + '.jpg')
     with open(image_path, 'wb') as image_file:
         shutil.copyfileobj(image_content.raw, image_file)
-    return image_path
+    return image_name
 
 
 def parse_fields_for_data_base(

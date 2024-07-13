@@ -2,8 +2,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
-webapp/img/
-webapp/podcasts/
+webapp/static/img/
+webapp/static/podcasts/
+webapp/static/rss
 webapp.db
 data_for_db.txt
 PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.xml
