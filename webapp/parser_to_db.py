@@ -6,13 +6,12 @@ import requests
 import shutil
 from yt_dlp.utils import DownloadError
 
-import config
-import converter_mp3
-from models import db, Feed, Podcast
+from webapp import config, converter_mp3
+from webapp.models import db, Feed, Podcast
 
 
 def image_download(image_url, image_prefix):
-    image_folder = os.path.join("static", "img")
+    image_folder = os.path.join(config.basedir, "static", "img")
     os.makedirs(image_folder, exist_ok=True)
     headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
                              "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -27,11 +26,11 @@ def image_download(image_url, image_prefix):
 
 
 def create_cover(cover_text, playlist_id):
-    img_template_path = os.path.join("templates", config.COVER_TEMPLATE)
+    img_template_path = os.path.join(config.basedir, "templates", config.COVER_TEMPLATE)
     img = Image.open(img_template_path)
     new_cover = ImageDraw.Draw(img)
     new_cover.text((100, 2600), cover_text, font_size=200, fill=(255, 255, 255))
-    covers_path = os.path.join("static", "covers")
+    covers_path = os.path.join(config.basedir, "static", "covers")
     os.makedirs(covers_path, exist_ok=True)
     new_cover_name = playlist_id + ".jpg"
     new_cover_path = os.path.join(covers_path, new_cover_name)

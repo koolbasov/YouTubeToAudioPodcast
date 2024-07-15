@@ -1,5 +1,4 @@
-from flask import Flask
-from models import db, Language
+from webapp.models import db, Language
 
 languages = {
     "Chinese (Simplified)":  "zh-cn",
@@ -21,10 +20,3 @@ def add_languages_to_db(languages):
                 language=language_name, identifier=short_name)
             db.session.add(new_language)
             db.session.commit()
-
-
-app = Flask(__name__)
-app.config.from_pyfile('config.py')
-db.init_app(app)
-with app.app_context():
-    add_languages_to_db(languages)

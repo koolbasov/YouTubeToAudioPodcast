@@ -1,6 +1,6 @@
 import requests
 
-import config
+from webapp import config
 
 
 def check_is_playlist(url):
@@ -34,18 +34,3 @@ def get_html_from_youtube(url):
     except requests.exceptions.ConnectionError as e:
         print(f"Произошла ошибка: {e}")
         return None
-
-
-if __name__ == "__main__":
-    def write_to_file(html, html_id, suffix):
-        filename = html_id + suffix
-        with open(filename, "w", encoding="utf-8") as f:
-            f.write(html)
-            print(f"Файл {f.name} записан")
-
-
-    playlist_url = "https://www.youtube.com/playlist?list=PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f"
-    playlist_xml, playlist_html, list_id = get_html_from_youtube(playlist_url)
-    if playlist_xml:
-        write_to_file(playlist_xml, list_id, ".xml")
-        write_to_file(playlist_html, list_id, ".html")

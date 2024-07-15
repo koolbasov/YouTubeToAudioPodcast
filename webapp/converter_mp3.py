@@ -3,11 +3,13 @@ from mutagen.easyid3 import EasyID3
 from mutagen.mp3 import MP3
 import os
 
+from webapp import config
+
 
 def download_and_convert_podcast(
         video_url, video_id, feed_title, genre="Podcast"):
     mp3_name = video_id + ".mp3"
-    download_path = os.path.join("static", "podcasts")
+    download_path = os.path.join(config.basedir, "static", "podcasts")
     mp3_path = os.path.join(download_path, mp3_name)
     download_options = {
         "quiet": True,
@@ -36,10 +38,3 @@ def download_and_convert_podcast(
             audio = MP3(mp3_path)
             duration = int(audio.info.length)
     return duration, mp3_name
-
-
-if __name__ == '__main__':
-    video_id = "SrSl6T1My00"
-    video_url = "https://www.youtube.com/watch?v=SrSl6T1My00"
-    feed_title = 'YoutubeToRSSforTests'
-    print(download_and_convert_podcast(video_url, video_id, feed_title))
