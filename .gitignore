@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+webapp/static/covers
 webapp/static/img/
 webapp/static/podcasts/
 webapp/static/rss

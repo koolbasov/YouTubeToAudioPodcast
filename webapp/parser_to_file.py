@@ -40,7 +40,7 @@ def parse_fields_for_data_base(
     feed_pubDate = soup_xml.find("published").text
     feed_pubDate = dt.datetime.strptime(feed_pubDate, config.TIME_FORMAT_YOUTUBE)
     lastBuildDate = dt.datetime.now(tz=dt.timezone.utc)
-    feed_image = config.ARTWORK_PATH
+    feed_image = config.COVER_TEMPLATE
 
     feed_fields_for_db = dict(
         id=db_feed_id,

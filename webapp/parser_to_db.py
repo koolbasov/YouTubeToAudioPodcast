@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import datetime as dt
 import os
+from PIL import Image, ImageDraw
 import requests
 import shutil
 from yt_dlp.utils import DownloadError
@@ -25,10 +26,22 @@ def image_download(image_url, image_prefix):
     return image_name
 
 
+def create_cover(cover_text, playlist_id):
+    img_template_path = os.path.join("templates", config.COVER_TEMPLATE)
+    img = Image.open(img_template_path)
+    new_cover = ImageDraw.Draw(img)
+    new_cover.text((100, 2600), cover_text, font_size=200, fill=(255, 255, 255))
+    covers_path = os.path.join("static", "covers")
+    os.makedirs(covers_path, exist_ok=True)
+    new_cover_name = playlist_id + ".jpg"
+    new_cover_path = os.path.join(covers_path, new_cover_name)
+    img.save(new_cover_path)
+    return new_cover_name
+
+
 def parse_fields_for_data_base(
         playlist_url, playlist_xml, playlist_html,
         playlist_id, language=2, user_id=1):
-    fields_for_db = []
     soup_html = BeautifulSoup(playlist_html, "html.parser")
     soup_xml = BeautifulSoup(playlist_xml, "xml")
     all_items_xml = soup_xml.findAll("entry")
@@ -42,7 +55,8 @@ def parse_fields_for_data_base(
     feed_pubDate = soup_xml.find("published").text
     feed_pubDate = dt.datetime.strptime(feed_pubDate, config.TIME_FORMAT_YOUTUBE)
     lastBuildDate = dt.datetime.now(tz=dt.timezone.utc)
-    feed_image = config.ARTWORK_PATH
+
+    feed_image = create_cover(feed_title, playlist_id)
     feed_id = save_feed(
         db_user_id, feed_title, feed_link,
         db_language, feed_description,
