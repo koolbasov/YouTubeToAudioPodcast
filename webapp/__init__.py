@@ -90,4 +90,9 @@ def create_app():
         flash('Исправьте ошибки в форме')
         return redirect(url_for('register'))
 
+    @app.route('/mainpage')
+    def main():
+        title = "Mainpage"
+        return render_template('mainpage.html', page_title=title)
+
     return app

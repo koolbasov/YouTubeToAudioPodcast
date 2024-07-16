@@ -1,80 +1,76 @@
-<!doctype html>
-<html lang="ru">
-    <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page_title }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  </head>
-  <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
-  </body>
-</html>
+{% extends "base.html" %}
 
-<header class="p-3 bg-dark text-white">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-        </a>
-        <span class="fs-4">{{ page_title }}</span>
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"></ul>
-          <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">ВХОД</button>
-          <button type="button" class="btn btn-outline-warning">РЕГИСТРАЦИЯ</button>
-        </div>
-      </div>
+{% block content %}
 
-<div class="text-bg-secondary p-3">
-    <input type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input">
+<div class="m-3 p-1">
+  <div class="col-10">
+    <div class="form-floating mb-3">
+  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+  <label for="floatingInput">Вставьте ссылку для скачивания</label>
 </div>
 
-<div class="btn-group" role="group" aria-label="Группа кнопок с вложенным раскрывающимся списком">
-    <button type="button" class="btn btn-warning">Загрузить плейлист</button>
-    <div class="btn-group" role="group">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      Язык
-    </button>
+  <div class="btn-group">
+  <button type="button" class="btn btn-outline-light me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Выбрать Язык
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Ru</a></li>
+    <li><a class="dropdown-item" href="#">En</a></li>
+    <li><a class="dropdown-item" href="#">Fr</a></li>
+    <li><a class="dropdown-item" href="#">De</a></li>
+    <li><a class="dropdown-item" href="#">It</a></li>
+    <li><a class="dropdown-item" href="#">Es</a></li>
+    <li><hr class="dropdown-divider"></li>
+  </ul>
+  </div>
+  <button type="button" class="btn btn-outline-warning">Загрузить плейлист</button>
+  </div>
+</div>
+
+<div class="m-3 p-5">
+<h2 class="text">Мои подкасты</h2>
+  <div class="p-3 bg-info bg-opacity-10 border border-secondary border-start-0 rounded-end">
+    <p><a href="#" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><h4>Плейлист</h4></a></p>
+    <img src="static/covers/PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.jpg" class="img-thumbnail" style="width: 200px; height: 200px;" alt="Specific size image">
+    <div class="btn-group d-grid gap-2 col-2 mx-auto">
+  <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Действие
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#">Скопировать RSS</a></li>
+    <li><a class="dropdown-item" href="#">Удалить плейлист</a></li>
+    <li><hr class="dropdown-divider"></li>
+  </ul>
+  </div>
+  </div>
+</div>
+
+<div class="m-3 p-5">
+  <div class="p-3 bg-info bg-opacity-10 border border-secondary border-start-0 rounded-end">
+  <p><a href="#" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><h4>Плейлист</h4></a></p>
+       <img src="static/covers/PLvO-3MXl8QMj1oztl-xhl-0A42SwoTvMg.jpg" class="img-thumbnail" style="width: 200px; height: 200px;" alt="Specific size image">
+    <div class="btn-group d-grid gap-2 col-2 mx-auto">
+  <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Действие
+  </button>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">Выпадающая ссылка</a></li>
-      <li><a class="dropdown-item" href="#">Выпадающая ссылка</a></li>
+    <li><a class="dropdown-item" href="#">Скопировать RSS</a></li>
+    <li><a class="dropdown-item" href="#">Удалить плейлист</a></li>
+    <li><hr class="dropdown-divider"></li>
     </ul>
   </div>
-</div>
-
-
-<p class="display-5">Мои подкасты</p>
-
-<div class="card mb-3" style="max-width: 1000px;">
-  <div class="row g-0">
-    <div class="col-md-4">
-      <img src="..." class="img-fluid rounded-start" alt="...">
-    </div>
-    <div class="col-md-8">
-      <div class="card-body">
-          <div class="text-bg-dark p-3">
-        <a href="#" class="stretched-link">Иди куда-нибудь</a>
-
-        <p class="card-text">Это более широкая карточка с вспомогательным текстом ниже в качестве естественного перехода к дополнительному контенту. Этот контент немного длиннее.</p>
-        <p class="card-text"><small class="text-body-secondary">Последнее обновление 3 мин. назад</small></p>
-          </div>
-      </div>
-    </div>
   </div>
 </div>
 
 
-<div class="btn-group btn-group-sm" role="group">
-    <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      Действие
-    </button>
-    <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">Скопировать RSS</a></li>
-      <li><a class="dropdown-item" href="#">Удалить</a></li>
-    </ul>
-  </div>
-</div>
+
+
+
+
+
+{% endblock %}
+
+
+
 
 
