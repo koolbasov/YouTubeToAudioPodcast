@@ -4,6 +4,7 @@ from flask_login import LoginManager, current_user, login_required, login_user, 
 from webapp.models import db, User
 from webapp.forms import LoginForm, RegistrationForm
 from webapp.create_feed import feed_generator
+from webapp.decorators import admin_required
 
 
 def create_app():
@@ -21,14 +22,14 @@ def create_app():
 
     @app.route('/')
     def index():
-        title = "YouTubeToRSS"
-        return render_template('home.html', page_title=title)
+        title = "YouTubeToAudioPodcast"
+        return render_template('index.html', page_title=title)
 
     @app.route('/login')
     def login():
         if current_user.is_authenticated:
-            return redirect(url_for('index'))
-        title = 'Вход'
+            return redirect(url_for('rss_file'))
+        title = 'YouTubeToAudioPodcast | Вход'
         login_form = LoginForm()
         return render_template('login.html', page_title=title, form=login_form)
 
@@ -36,11 +37,11 @@ def create_app():
     def process_login():
         form = LoginForm()
         if form.validate_on_submit():
-            user = User.query.filter_by(User.username == form.username.data).first()
+            user = User.query.filter_by(username=form.username.data).first()
             if user and user.check_password(form.password.data):
                 login_user(user, remember=form.remember_me.data)
-                flash('Вы успешно зашли на сайт')
-                return redirect(url_for('index'))
+                flash('Вы успешно вошли на сайт')
+                return redirect(url_for('main'))
 
         flash('Неправильное имя пользователя или пароль')
         return redirect(url_for('login'))
@@ -51,15 +52,17 @@ def create_app():
         flash('Вы успешно разлогинились')
         return redirect(url_for('index'))
 
-    @app.route('/admin')
-    @login_required
+    @app.route('/admin_panel')
+    @admin_required
     def admin_index():
         if current_user.is_admin:
-            return 'admin'
+            title = "YouTubeToAudioPodcast | Панель управления"
+            return render_template('admin.html', page_title=title)
         else:
             return 'У вас нет прав администратора'
 
     @app.route('/rss')
+    @login_required
     def rss_file():
         filename1 = feed_generator(1)
         filename2 = feed_generator(2)
@@ -74,7 +77,7 @@ def create_app():
         if current_user.is_authenticated:
             return redirect(url_for('index'))
         form = RegistrationForm()
-        title = "Регистрация"
+        title = "YouTubeToAudioPodcast | Регистрация"
         return render_template('registration.html', page_title=title, form=form)
 
     @app.route('/process-reg', methods=['POST'])
@@ -90,9 +93,9 @@ def create_app():
         flash('Исправьте ошибки в форме')
         return redirect(url_for('register'))
 
-    @app.route('/mainpage')
+    @app.route('/home')
     def main():
-        title = "Mainpage"
+        title = "YouTubeToAudioPodcast | подкасты"
         return render_template('mainpage.html', page_title=title)
 
     return app

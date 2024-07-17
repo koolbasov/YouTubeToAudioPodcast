@@ -4,6 +4,7 @@
 
 <div class="m-3 p-1">
   <div class="col-10">
+    {% include('messages.html') %}
     <div class="form-floating mb-3">
   <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
   <label for="floatingInput">Вставьте ссылку для скачивания</label>
@@ -30,7 +31,7 @@
 <div class="m-3 p-5">
 <h2 class="text">Мои подкасты</h2>
   <div class="p-3 bg-info bg-opacity-10 border border-secondary border-start-0 rounded-end">
-    <p><a href="#" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><h4>Плейлист</h4></a></p>
+    <p><a href="#" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Плейлист</a></p>
     <img src="static/covers/PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.jpg" class="img-thumbnail" style="width: 200px; height: 200px;" alt="Specific size image">
     <div class="btn-group d-grid gap-2 col-2 mx-auto">
   <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -47,7 +48,7 @@
 
 <div class="m-3 p-5">
   <div class="p-3 bg-info bg-opacity-10 border border-secondary border-start-0 rounded-end">
-  <p><a href="#" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"><h4>Плейлист</h4></a></p>
+  <p><a href="#" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Плейлист</a></p>
        <img src="static/covers/PLvO-3MXl8QMj1oztl-xhl-0A42SwoTvMg.jpg" class="img-thumbnail" style="width: 200px; height: 200px;" alt="Specific size image">
     <div class="btn-group d-grid gap-2 col-2 mx-auto">
   <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -61,16 +62,4 @@
   </div>
   </div>
 </div>
-
-
-
-
-
-
-
 {% endblock %}
-
-
-
-
-

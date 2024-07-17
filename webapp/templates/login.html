@@ -1,19 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-4 position-absolute top-50 start-50 translate-middle">
-            <h2 class="text-center">
-            ВОЙТИ</h2>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <div class="alert alert-warning" role="alert">
-                    {% for message in messages %}
-                        {{ message }}<br>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            {% endwith %}
+    <p>&nbsp;</p>
+    {% include('messages.html') %}
+    <div class='d-flex justify-content-end'>
+        <div class="col-4">
             <form action="{{ url_for('process_login') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="from-group">
@@ -28,11 +19,11 @@
                     {{ form.remember_me() }}
                     {{ form.remember_me.label(class_='form-check-label') }}
                 </div>
-                {{ form.submit }}
+                <div> {{ form.submit }}</div>
             </form>
+        </div>
     </div>
         <div class="col-8">
 
         </div>
 {% endblock %}
-
