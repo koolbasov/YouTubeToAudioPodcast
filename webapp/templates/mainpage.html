@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<div class="m-3 p-1">
-  <div class="col-10">
+<div class="m-5 p-1">
+  <div class="col-12">
     {% include('messages.html') %}
     <div class="form-floating mb-3">
   <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -24,42 +24,66 @@
     <li><hr class="dropdown-divider"></li>
   </ul>
   </div>
-  <button type="button" class="btn btn-outline-warning">Загрузить плейлист</button>
+  <button type="button" class="btn btn-outline-warning float-end">Загрузить плейлист</button>
   </div>
 </div>
 
-<div class="m-3 p-5">
-<h2 class="text">Мои подкасты</h2>
+<div class="m-5 p-1">
+<h2 class="text">Мои плейлисты</h2>
+</div>
+
+<div class="m-5 p-1">
   <div class="p-3 bg-info bg-opacity-10 border border-secondary border-start-0 rounded-end">
-    <p><a href="#" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Плейлист</a></p>
-    <img src="static/covers/PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.jpg" class="img-thumbnail" style="width: 200px; height: 200px;" alt="Specific size image">
-    <div class="btn-group d-grid gap-2 col-2 mx-auto">
-  <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Действие
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">Скопировать RSS</a></li>
-    <li><a class="dropdown-item" href="#">Удалить плейлист</a></li>
-    <li><hr class="dropdown-divider"></li>
-  </ul>
-  </div>
+    <div class="text-center"
+    <p><a href="#" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Python Bytes</a></p>
+    </div>
+      <div class="container-fluid">
+        <div class="d-flex align-items-stretch">
+          <div class="span2">
+            <img src="static/covers/PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.jpg" class="img-thumbnail" style="width: 500px;" alt="Specific size image">
+          </div>
+              <div class="span10">
+                <h6 class="text-center">
+                Python Bytes is a weekly podcast hosted by Michael Kennedy and Brian Okken.
+                Python Bytes podcast delivers headlines directly to your earbuds.
+                If you want to stay up on the Python developer news but don't have time to scour reddit, twitter, and other news sources, just subscribe and you'll get the best picks delivered weekly.
+                </h6>
+                    <div class="m-5 p-1 float-end">
+                      <p><a href="#" class="p-3 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Скопировать RSS</a>
+                      <a href="#" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Удалить плейлист</a></p>
+                    </div>
+              </div>
+          </div>
+      </div>
   </div>
 </div>
 
-<div class="m-3 p-5">
+<div class="m-5 p-1">
   <div class="p-3 bg-info bg-opacity-10 border border-secondary border-start-0 rounded-end">
-  <p><a href="#" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Плейлист</a></p>
-       <img src="static/covers/PLvO-3MXl8QMj1oztl-xhl-0A42SwoTvMg.jpg" class="img-thumbnail" style="width: 200px; height: 200px;" alt="Specific size image">
-    <div class="btn-group d-grid gap-2 col-2 mx-auto">
-  <button type="button" class="btn btn-outline-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Действие
-  </button>
-    <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">Скопировать RSS</a></li>
-    <li><a class="dropdown-item" href="#">Удалить плейлист</a></li>
-    <li><hr class="dropdown-divider"></li>
-    </ul>
-  </div>
+    <div class="text-center"
+    <p><a href="#" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Плейлист 2</a></p>
+    </div>
+      <div class="container-fluid">
+        <div class="d-flex align-items-stretch">
+          <div class="span2">
+            <img src="static/covers/PLvO-3MXl8QMj1oztl-xhl-0A42SwoTvMg.jpg" class="img-thumbnail" style="width: 500px;" alt="Specific size image">
+          </div>
+              <div class="span10">
+                <h6 class="text-center">
+                Python Bytes is a weekly podcast hosted by Michael Kennedy and Brian Okken.
+                Python Bytes podcast delivers headlines directly to your earbuds.
+                If you want to stay up on the Python developer news but don't have time to scour reddit, twitter, and other news sources, just subscribe and you'll get the best picks delivered weekly.
+                </h6>
+                    <div class="m-5 p-1 float-end">
+                      <p><a href="#" class="p-3 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Скопировать RSS</a>
+                      <a href="#" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Удалить плейлист</a></p>
+                    </div>
+              </div>
+          </div>
+      </div>
   </div>
 </div>
+
+
+
 {% endblock %}
