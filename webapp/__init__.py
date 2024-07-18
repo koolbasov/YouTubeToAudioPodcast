@@ -1,7 +1,8 @@
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
-from webapp.models import db, User
+
+from webapp.models import db, User, Feed
 from webapp.forms import LoginForm, RegistrationForm
 from webapp.create_feed import feed_generator
 from webapp.decorators import admin_required
@@ -28,12 +29,12 @@ def create_app():
     @app.route('/login')
     def login():
         if current_user.is_authenticated:
-            return redirect(url_for('rss_file'))
+            return redirect(url_for('main'))
         title = 'YouTubeToAudioPodcast | Вход'
         login_form = LoginForm()
         return render_template('login.html', page_title=title, form=login_form)
 
-    @app.route('/process-login', methods=['POST'])
+    @app.route('/process-login', methods=['GET', 'POST'])
     def process_login():
         form = LoginForm()
         if form.validate_on_submit():
@@ -41,7 +42,9 @@ def create_app():
             if user and user.check_password(form.password.data):
                 login_user(user, remember=form.remember_me.data)
                 flash('Вы успешно вошли на сайт')
-                return redirect(url_for('main'))
+                return redirect(url_for('login'))
+        elif current_user.is_authenticated:
+            return redirect(url_for('main'))
 
         flash('Неправильное имя пользователя или пароль')
         return redirect(url_for('login'))
@@ -61,41 +64,51 @@ def create_app():
         else:
             return 'У вас нет прав администратора'
 
-    @app.route('/rss')
-    @login_required
-    def rss_file():
-        filename1 = feed_generator(1)
-        filename2 = feed_generator(2)
-        filepath1 = f'static/rss/{filename1}'
-        filepath2 = f'static/rss/{filename2}'
-        return render_template(
-            'rss.html', rss_file1=filepath1,
-            rss_file2=filepath2)
-
     @app.route('/register')
     def register():
         if current_user.is_authenticated:
-            return redirect(url_for('index'))
-        form = RegistrationForm()
+            return redirect(url_for('main'))
         title = "YouTubeToAudioPodcast | Регистрация"
-        return render_template('registration.html', page_title=title, form=form)
+        form = RegistrationForm()
+        return render_template('registration.html',
+                               page_title=title, form=form)
 
-    @app.route('/process-reg', methods=['POST'])
+    @app.route('/process-reg', methods=['GET', 'POST'])
     def process_reg():
         form = RegistrationForm()
         if form.validate_on_submit():
-            new_user = User(username=form.username.data, email=form.email.data, role='user')
+            new_user = User(username=form.username.data,
+                            email=form.email.data, role='user')
             new_user.set_password(form.password.data)
             db.session.add(new_user)
             db.session.commit()
             flash('Вы успешно зарегистрировались')
             return redirect(url_for('login'))
-        flash('Исправьте ошибки в форме')
-        return redirect(url_for('register'))
+        elif current_user.is_authenticated:
+            return redirect(url_for('main'))
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash('Ошибка в поле "{}": - {}'.format(
+                        getattr(form, field).label.text, error
+                    ))
+            return redirect(url_for('register'))
 
     @app.route('/home')
+    @login_required
     def main():
         title = "YouTubeToAudioPodcast | подкасты"
-        return render_template('mainpage.html', page_title=title)
+        playlists = Feed.query.filter_by(user_id=current_user.id).all()
+        rss_links = []
+        for playlist in playlists:
+            link = feed_generator(playlist.id)
+            rss_links.append(link)
+        return render_template('mainpage.html',
+                               page_title=title, playlists=playlists,
+                               rss_links=rss_links)
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('404.html'), 404
 
     return app

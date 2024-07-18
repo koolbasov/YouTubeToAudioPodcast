@@ -1,9 +1,11 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <div class="alert alert-warning" role="alert">
-        {% for message in messages %}
-            {{ message }}<br>
-        {% endfor %}
+    <div class='d-flex justify-content-end'>
+        <div class="col-4 alert alert-warning" role="alert">
+            {% for message in messages %}
+                {{ message }}<br>
+            {% endfor %}
+        </div>
     </div>
     {% endif %}
 {% endwith %}
