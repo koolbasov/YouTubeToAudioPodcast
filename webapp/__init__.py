@@ -111,4 +111,15 @@ def create_app():
     def page_not_found(e):
         return render_template('404.html'), 404
 
+    @app.route('/podcast')
+    def podcast():
+        title = "Podcast"
+        return render_template('podcast.html', page_title=title)
+
+    @app.route('/download')
+    def download():
+        return render_template('download.html')
+
+
+
     return app
