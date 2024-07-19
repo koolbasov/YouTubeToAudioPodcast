@@ -1,31 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<br />
+{% include('messages.html') %}
 <div class="m-5 p-1">
-  <div class="col-12">
-    {% include('messages.html') %}
     <div class="form-floating mb-3">
-  <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-  <label for="floatingInput">Вставьте ссылку для скачивания</label>
-</div>
-
-  <div class="btn-group">
-  <button type="button" class="btn btn-outline-light me-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    Выбрать Язык
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#">Ru</a></li>
-    <li><a class="dropdown-item" href="#">En</a></li>
-    <li><a class="dropdown-item" href="#">Fr</a></li>
-    <li><a class="dropdown-item" href="#">De</a></li>
-    <li><a class="dropdown-item" href="#">It</a></li>
-    <li><a class="dropdown-item" href="#">Es</a></li>
-    <li><hr class="dropdown-divider"></li>
-  </ul>
-  </div>
-  <button type="button" class="btn btn-outline-warning float-end">Загрузить плейлист</button>
-  </div>
+        <form action="{{ url_for('process_download') }}" method="POST">
+                {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.feed_link.label }}
+                {{ form.feed_link() }}
+            </div>
+            <br>
+            <div class="form-group">
+                {{ form.language.label }}
+                {{ form.language() }}
+            </div>
+            <br>
+            <div class="form-group">
+              {{ form.submit }}
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="m-5 p-1">
@@ -48,9 +44,9 @@
                 <img src="static/covers/{{ playlist.feed_image }}" class="img-thumbnail" style="width: 500px;" alt="{{ playlist.feed_title }}">
               </div>
                   <div class="span10">
-                    <h6 class="text-center">{{ playlist.feed_description|safe }}</h6>
+                    <p class="feed_description">{{ playlist.feed_description|safe }}</p>
                         <div class="m-5 p-1 float-end">
-                          <p><a href="{{ playlist.feed_link }}">Смотреть на YouTube</a>
+                          <p ><a href="{{ playlist.feed_link }}">Смотреть на YouTube</a>
                           <a href="static/rss/{{ rss_link }}" class="p-3 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Скопировать RSS</a>
                           <a href="#" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Удалить плейлист</a></p>
                         </div>
@@ -69,7 +65,6 @@
           Вы пока не загрузили ни одного плейлиста
         </div>
     </div>
-
 {% endif %}
 
 

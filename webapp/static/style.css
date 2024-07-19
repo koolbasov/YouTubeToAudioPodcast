@@ -1,3 +1,8 @@
 .page-wrap {
     min-height: 100vh;
 }
+
+.feed_description {
+    margin-top: 5px;
+    margin-left: 15px;
+}

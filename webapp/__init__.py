@@ -2,8 +2,8 @@ from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
 
-from webapp.models import db, User, Feed
-from webapp.forms import LoginForm, RegistrationForm
+from webapp.models import db, User, Feed, Language
+from webapp.forms import LoginForm, RegistrationForm, DownloadFeedForm
 from webapp.create_feed import feed_generator
 from webapp.decorators import admin_required
 
@@ -97,6 +97,12 @@ def create_app():
     @app.route('/home')
     @login_required
     def main():
+        languages = Language.query.all()
+        languages_set = []
+        for language in languages:
+            languages_set.append((language.id, language.language))
+        form = DownloadFeedForm()
+        form.language.choices = languages_set
         title = "YouTubeToAudioPodcast | подкасты"
         playlists = Feed.query.filter_by(user_id=current_user.id).all()
         rss_links = []
@@ -105,7 +111,27 @@ def create_app():
             rss_links.append(link)
         return render_template('mainpage.html',
                                page_title=title, playlists=playlists,
-                               rss_links=rss_links)
+                               rss_links=rss_links, form=form)
+
+    @app.route('/download', methods=['GET', 'POST'])
+    def process_download():
+        form = DownloadFeedForm()
+        if form.validate_on_submit():
+            feed_link_data = form.feed_link.data
+            language_data = form.language.data
+            user_id_data = current_user.id
+            flash("Этот плейлист мы можем загрузить, но еще не успели все доделать =)")
+            return render_template('download.html',
+                                   feed_link=feed_link_data,
+                                   language=language_data,
+                                   user_id=user_id_data)
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash('Ошибка в поле "{}": - {}'.format(
+                        getattr(form, field).label.text, error
+                    ))
+            return redirect(url_for('main'))
 
     @app.errorhandler(404)
     def page_not_found(e):
@@ -115,11 +141,5 @@ def create_app():
     def podcast():
         title = "Podcast"
         return render_template('podcast.html', page_title=title)
-
-    @app.route('/download')
-    def download():
-        return render_template('download.html')
-
-
 
     return app
