@@ -142,4 +142,9 @@ def create_app():
         title = "Podcast"
         return render_template('podcast.html', page_title=title)
 
+    @app.route('/account')
+    def account():
+        title = "My_account"
+        return render_template('account.html', page_title=title)
+
     return app
