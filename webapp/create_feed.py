@@ -14,7 +14,7 @@ def feed_generator(feed_id):
     fg.title(my_feed.feed_title)
     lang = Language.query.filter(Language.id == my_feed.lang_id).first()
     fg.language(lang.identifier)
-    fg.link(href=f'{config.LOCAL_SITE_URL}/static/rss/{my_feed.feed_title}_{my_feed.id}.xml')
+    fg.link(href=f'{config.LOCAL_SITE_URL}')
     fg.description(my_feed.feed_description)
     fg.pubDate(my_feed.feed_pubDate.replace(tzinfo=pytz.UTC))
     fg.lastBuildDate(my_feed.lastBuildDate.replace(tzinfo=pytz.UTC))

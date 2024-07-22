@@ -1,11 +1,12 @@
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 
-
-from webapp.models import db, User, Feed, Language
-from webapp.forms import LoginForm, RegistrationForm, DownloadFeedForm
+from webapp.models import db, User, Feed, Language, Podcast
+from webapp.forms import LoginForm, RegistrationForm, DownloadFeedForm, EditProfile
 from webapp.create_feed import feed_generator
 from webapp.decorators import admin_required
+from webapp.get_xml_html import get_html_from_youtube
+from webapp.parser_to_db import parse_fields_for_data_base
 
 
 def create_app():
@@ -120,11 +121,13 @@ def create_app():
             feed_link_data = form.feed_link.data
             language_data = form.language.data
             user_id_data = current_user.id
-            flash("Этот плейлист мы можем загрузить, но еще не успели все доделать =)")
-            return render_template('download.html',
-                                   feed_link=feed_link_data,
-                                   language=language_data,
-                                   user_id=user_id_data)
+            playlist_xml, playlist_html, playlist_id = (
+                get_html_from_youtube(feed_link_data))
+            flash("Ваш плейлист загружен")
+            parse_fields_for_data_base(
+                feed_link_data, playlist_xml, playlist_html,
+                playlist_id, language_data, user_id_data)
+            return redirect(url_for('main'))
         else:
             for field, errors in form.errors.items():
                 for error in errors:
@@ -133,18 +136,30 @@ def create_app():
                     ))
             return redirect(url_for('main'))
 
-    @app.errorhandler(404)
-    def page_not_found(e):
-        return render_template('404.html'), 404
+    @app.route('/podcast/<int:podcast_id>')
+    def podcast(podcast_id):
+        title = "YouTubeToAudioPodcast | подкаст"
+        my_podcasts = Podcast.query.filter(Podcast.feed_id == podcast_id).all()
+        feed_title = Feed.query.filter(Feed.id == podcast_id).first().feed_title
+        rss_link = feed_generator(podcast_id)
+        if not my_podcasts:
+            abort(404)
 
-    @app.route('/podcast')
-    def podcast():
-        title = "Podcast"
-        return render_template('podcast.html', page_title=title)
+        return render_template('podcast.html',
+                               page_title=title, feed_title=feed_title,
+                               podcasts=my_podcasts, rss_link=rss_link)
 
     @app.route('/account')
     def account():
-        title = "My_account"
-        return render_template('account.html', page_title=title)
+        title = "YouTubeToAudioPodcast | мои данные"
+        form = EditProfile()
+        print(current_user.email)
+        return render_template('account.html', page_title=title,
+                               form=form)
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        title = "YouTubeToAudioPodcast | 404 страница не найдена"
+        return render_template('404.html', page_title=title), 404
 
     return app

@@ -19,7 +19,7 @@ def image_download(image_url, image_prefix):
                }
     image_content = requests.get(image_url, headers=headers, stream=True)
     image_name = image_prefix + ".jpg"
-    image_path = os.path.join(image_folder, image_name + '.jpg')
+    image_path = os.path.join(image_folder, image_name)
     with open(image_path, 'wb') as image_file:
         shutil.copyfileobj(image_content.raw, image_file)
     return image_name

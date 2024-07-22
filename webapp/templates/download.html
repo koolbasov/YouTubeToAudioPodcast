@@ -2,26 +2,24 @@
 
 {% block content %}
 {% include('messages.html') %}
-<h4> Будем загружать плейлист: <br> {{ feed_link }}</h4><br>
-<h4>Идентификатор языка: {{ language }}</h4><br>
-<h4>User_id: {{ user_id }} </h4>
+<h4> Загружаем плейлист: <br> {{ feed_link }}</h4><br>
 
-<!--<div class="page-wrap d-flex flex-row align-items-center">-->
-<!--    <div class="container">-->
-<!--        <div class="row justify-content-center">-->
-<!--            <div class="col-md-12 text-center">-->
-<!--                <div class="mb-4 lead">-->
-<!--                    <h1>Мы загружаем и конвертируем ваши подкасты,-->
-<!--                        в зависимости от длины плей-листа это может занять до нескольких часов</h1>-->
-<!--                    <div class="d-flex justify-content-center">-->
-<!--                        <div class="spinner-border" role="status">-->
-<!--                            <span class="visually-hidden">Загрузка...</span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="page-wrap d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <div class="mb-4 lead">
+                    <h1>Мы загружаем и конвертируем ваши подкасты,
+                        в зависимости от длины плей-листа это может занять до нескольких часов</h1>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
