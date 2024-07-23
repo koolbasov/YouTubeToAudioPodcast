@@ -1,8 +1,10 @@
 from flask import Flask, render_template, flash, redirect, url_for
-from flask_login import LoginManager, current_user, login_required, login_user, logout_user
+from flask_login import (LoginManager, current_user, login_required,
+                         login_user, logout_user)
 
 from webapp.models import db, User, Feed, Language, Podcast
-from webapp.forms import LoginForm, RegistrationForm, DownloadFeedForm, EditProfile
+from webapp.forms import (LoginForm, RegistrationForm, DownloadFeedForm,
+                          EditProfile)
 from webapp.create_feed import feed_generator
 from webapp.decorators import admin_required
 from webapp.get_xml_html import get_html_from_youtube
@@ -114,7 +116,17 @@ def create_app():
                                page_title=title, playlists=playlists,
                                rss_links=rss_links, form=form)
 
+    @app.route('/delete_playlist/<int:playlist_id>')
+    @login_required
+    def delete_playlist(playlist_id):
+        playlist = Feed.query.filter_by(id=playlist_id).first()
+        flash(f"Вы удалили плейлист  {playlist.feed_title}")
+        db.session.delete(playlist)
+        db.session.commit()
+        return redirect(url_for('main'))
+
     @app.route('/download', methods=['GET', 'POST'])
+    @login_required
     def process_download():
         form = DownloadFeedForm()
         if form.validate_on_submit():
@@ -139,23 +151,48 @@ def create_app():
     @app.route('/podcast/<int:podcast_id>')
     def podcast(podcast_id):
         title = "YouTubeToAudioPodcast | подкаст"
-        my_podcasts = Podcast.query.filter(Podcast.feed_id == podcast_id).all()
-        feed_title = Feed.query.filter(Feed.id == podcast_id).first().feed_title
-        rss_link = feed_generator(podcast_id)
-        if not my_podcasts:
-            abort(404)
+        try:
+            my_podcasts = Podcast.query.filter(Podcast.feed_id == podcast_id).all()
+            feed_title = Feed.query.filter(Feed.id == podcast_id).first().feed_title
+            rss_link = feed_generator(podcast_id)
+            return render_template('podcast.html',
+                                   page_title=title, feed_title=feed_title,
+                                   podcasts=my_podcasts, rss_link=rss_link)
+        except AttributeError:
+            flash("Такого подкаста еще не загружено или он был удален")
+            return redirect(url_for('main'))
 
-        return render_template('podcast.html',
-                               page_title=title, feed_title=feed_title,
-                               podcasts=my_podcasts, rss_link=rss_link)
+    @app.route('/delete_podcast/<int:podcast_id>')
+    @login_required
+    def delete_podcast(podcast_id):
+        podcast_to_delete = Podcast.query.filter_by(id=podcast_id).first()
+        flash(f"Вы удалили подкаст  {podcast_to_delete.podcast_title}")
+        db.session.delete(podcast_to_delete)
+        db.session.commit()
+        return redirect(url_for('main'))
 
-    @app.route('/account')
+    @app.route('/account', methods=['GET', 'POST'])
+    @login_required
     def account():
         title = "YouTubeToAudioPodcast | мои данные"
         form = EditProfile()
-        print(current_user.email)
+        username = current_user.username
+        email = current_user.email
+        if form.validate_on_submit():
+            new_user_data = User.query.filter_by(username=username).first()
+            new_user_data.set_password(form.password.data)
+            db.session.add(new_user_data)
+            db.session.commit()
+            flash('Данные успешно сохранены')
+            return redirect(url_for('account'))
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash('Ошибка в поле "{}": - {}'.format(
+                        getattr(form, field).label.text, error
+                    ))
         return render_template('account.html', page_title=title,
-                               form=form)
+                               form=form, username=username, email=email)
 
     @app.errorhandler(404)
     def page_not_found(e):

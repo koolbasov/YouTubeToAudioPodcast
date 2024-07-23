@@ -16,6 +16,8 @@ class Feed(db.Model):
     feed_pubDate = db.Column(db.DateTime, nullable=False)
     lastBuildDate = db.Column(db.DateTime, nullable=False)
     feed_image = db.Column(db.String, nullable=False)
+    my_podcast = db.relationship("Podcast", back_populates="my_playlist",
+                                 cascade='all, delete, delete-orphan')
 
     def __repr__(self):
         return '<Feed {}>'.format(self.feed_title, self.feed_link)
@@ -24,7 +26,8 @@ class Feed(db.Model):
 class Podcast(db.Model):
     __tablename__ = 'podcast'
     id = db.Column(db.Integer, primary_key=True)
-    feed_id = db.Column(db.Integer, db.ForeignKey('feed.id'))
+    feed_id = db.Column(db.Integer,
+                        db.ForeignKey('feed.id', ondelete='CASCADE'))
     podcast_title = db.Column(db.String, nullable=False)
     ytb_link = db.Column(db.String, unique=True, nullable=False)
     ytb_description = db.Column(db.String)
@@ -34,6 +37,7 @@ class Podcast(db.Model):
     ytb_author = db.Column(db.String, nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     ytb_image = db.Column(db.String, nullable=False)
+    my_playlist = db.relationship("Feed", back_populates="my_podcast")
 
     def __repr__(self):
         return '<Podcast {}>'.format(self.ytb_link, self.podcast_title)
@@ -58,7 +62,7 @@ class User(db.Model, UserMixin):
         return self.role == 'admin'
 
     def __repr__(self):
-        return '<User {}>'.format(self.user_name)
+        return "<User name={} id={}>".format(self.username, self.id)
 
 
 class Language(db.Model):

@@ -1,30 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <p>&nbsp;</p>
+<p xmlns="http://www.w3.org/1999/html">&nbsp;</p>
     {% include('messages.html') %}
     <div class='d-flex justify-content-end'>
         <div class="col-4">
             <form action="{{ url_for('account') }}" method="POST">
                 {{ form.hidden_tag() }}
-                <div class="form-group">
-                    {{ form.username.label }}
-                    {{ form.username() }}
+                <div class="mb-3">
+                    <label for="login" class="form-label">Логин</label>
+                    <input class="form-control" type="text" value="{{ username }}" aria-label="username" disabled readonly>
                 </div>
-                <div class="form-group">
-                    {{ form.email.label }}
-                    {{ form.email() }}
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input class="form-control" type="text" value="{{ email }}" aria-label="email" disabled readonly>
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     {{ form.password.label }}
                     {{ form.password() }}
                 </div>
-                <div class="form-group">
+                <div class="mb-3">
                     {{ form.password2.label }}
                     {{ form.password2() }}
                 </div>
-                <br/>
-               <div> {{ form.submit }}</div>
+                <div> {{ form.submit }}</div>
             </form>
         </div>
     </div>
