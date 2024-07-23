@@ -11,14 +11,14 @@
                 {{ form.feed_link.label }}
                 {{ form.feed_link() }}
             </div>
-            <br>
-            <div class="form-group col-2 float-end">
-                {{ form.language.label }}
-                {{ form.language() }}
-            </div>
-            <br>
-            <div class="form-group">
-              {{ form.submit }}
+            <div class="btn-group">
+                <div class="form-group">
+                    {{ form.language.label }}
+                    {{ form.language() }}
+                </div>
+                <div class="form-group m-2 p-3">
+                    {{ form.submit }}
+                </div>
             </div>
         </form>
     </div>
@@ -43,7 +43,7 @@
               <div class="span2">
                 <img src="static/covers/{{ playlist.feed_image }}" class="img-thumbnail" style="width: 500px;" alt="{{ playlist.feed_title }}">
               </div>
-                  <div class="span10">
+                  <div class="span10 p-3">
                     <p class="feed_description">{{ playlist.feed_description|safe }}</p>
                         <div class="m-5 p-1 float-end">
                           <p><a href="{{ playlist.feed_link }}">Смотреть на YouTube</a>
