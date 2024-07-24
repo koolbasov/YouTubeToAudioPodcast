@@ -50,7 +50,8 @@ class DownloadFeedForm(FlaskForm):
     feed_link = StringField('Вставьте ссылку для скачивания',
                             validators=[DataRequired()],
                             render_kw={"class": "form-control"})
-    language = SelectField('Выберите язык', validate_choice=False,
+    language = SelectField('Выберите язык',
+                           validators=[DataRequired()],
                            render_kw={"class": "form-control"})
     submit = SubmitField('Загрузить плейлист',
                          render_kw={"class": "btn btn-warning"})

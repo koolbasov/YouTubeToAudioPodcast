@@ -20,3 +20,11 @@ def add_languages_to_db(languages):
                 language=language_name, identifier=short_name)
             db.session.add(new_language)
             db.session.commit()
+
+
+def languages_for_form():
+    languages_list = Language.query.all()
+    languages_set = []
+    for language in languages_list:
+        languages_set.append((language.id, language.language))
+    return languages_set

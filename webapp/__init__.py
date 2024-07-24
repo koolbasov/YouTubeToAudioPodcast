@@ -9,6 +9,7 @@ from webapp.create_feed import feed_generator
 from webapp.decorators import admin_required
 from webapp.get_xml_html import get_html_from_youtube
 from webapp.parser_to_db import parse_fields_for_data_base
+from webapp.languages_for_db import languages_for_form
 
 
 def create_app():
@@ -100,10 +101,7 @@ def create_app():
     @app.route('/home')
     @login_required
     def main():
-        languages = Language.query.all()
-        languages_set = []
-        for language in languages:
-            languages_set.append((language.id, language.language))
+        languages_set = languages_for_form()
         form = DownloadFeedForm()
         form.language.choices = languages_set
         title = "YouTubeToAudioPodcast | подкасты"
@@ -128,7 +126,9 @@ def create_app():
     @app.route('/download', methods=['GET', 'POST'])
     @login_required
     def process_download():
+        languages_set = languages_for_form()
         form = DownloadFeedForm()
+        form.language.choices = languages_set
         if form.validate_on_submit():
             feed_link_data = form.feed_link.data
             language_data = form.language.data
@@ -201,3 +201,8 @@ def create_app():
         return render_template('404.html', page_title=title), 404
 
     return app
+
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run()
