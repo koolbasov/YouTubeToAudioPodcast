@@ -14,7 +14,7 @@ class LoginForm(FlaskForm):
                              render_kw={"class": "form-control"})
     remember_me = BooleanField('Запомнить меня', default=True,
                                render_kw={"class": "form-check-input"})
-    submit = SubmitField('Отправить',
+    submit = SubmitField('Войти',
                          render_kw={"class": "btn btn-warning"})
 
 
@@ -29,7 +29,7 @@ class RegistrationForm(FlaskForm):
                               validators=[DataRequired(),
                                           EqualTo('password')],
                               render_kw={"class": "form-control"})
-    submit = SubmitField("Отправить",
+    submit = SubmitField("Зарегистрироваться",
                          render_kw={"class": "btn btn-warning"})
 
     def validate_username(self, username):
@@ -79,5 +79,5 @@ class EditProfile(FlaskForm):
                               validators=[DataRequired(),
                                           EqualTo('password')],
                               render_kw={"class": "form-control"})
-    submit = SubmitField("Отправить",
+    submit = SubmitField("Сохранить",
                          render_kw={"class": "btn btn-warning"})

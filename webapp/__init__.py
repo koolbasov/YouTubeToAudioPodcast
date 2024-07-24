@@ -166,10 +166,11 @@ def create_app():
     @login_required
     def delete_podcast(podcast_id):
         podcast_to_delete = Podcast.query.filter_by(id=podcast_id).first()
-        flash(f"Вы удалили подкаст  {podcast_to_delete.podcast_title}")
+        playlist_id = podcast_to_delete.feed_id
+        flash(f"Вы удалили подкаст: {podcast_to_delete.podcast_title}")
         db.session.delete(podcast_to_delete)
         db.session.commit()
-        return redirect(url_for('main'))
+        return redirect(url_for('podcast', podcast_id=playlist_id))
 
     @app.route('/account', methods=['GET', 'POST'])
     @login_required
