@@ -44,17 +44,19 @@ def create_cover(cover_text, playlist_id):
 
 def parse_fields_for_data_base(
         playlist_url, playlist_xml, playlist_html,
-        playlist_id, language=2, user_id=1):
+        playlist_id, language, user_id):
     soup_html = BeautifulSoup(playlist_html, "html.parser")
     soup_xml = BeautifulSoup(playlist_xml, "xml")
     all_items_xml = soup_xml.findAll("entry")
 
     # Fields for feed
-    db_user_id = user_id  # будет передан из базы данных при добавлении плейлиста
+    db_user_id = user_id
     feed_title = soup_html.find("meta", property="og:title")['content']
     feed_link = playlist_url
     db_language = language
     feed_description = soup_html.find("meta", property="og:description")['content']
+    if not feed_description:
+        feed_description = "No description"
     feed_pubDate = soup_xml.find("published").text
     feed_pubDate = dt.datetime.strptime(feed_pubDate, config.TIME_FORMAT_YOUTUBE)
     lastBuildDate = dt.datetime.now(tz=dt.timezone.utc)
