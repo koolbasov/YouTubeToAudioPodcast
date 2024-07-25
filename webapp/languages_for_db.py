@@ -1,7 +1,6 @@
 from webapp.models import db, Language
 
 languages = {
-    "Chinese (Simplified)":  "zh-cn",
     "English":  "en",
     "French":  "fr",
     "German":  "de",

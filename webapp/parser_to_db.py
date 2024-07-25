@@ -1,9 +1,10 @@
 from bs4 import BeautifulSoup
 import datetime as dt
 import os
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import requests
 import shutil
+import textwrap
 from yt_dlp.utils import DownloadError
 
 from webapp import config, converter_mp3
@@ -29,7 +30,10 @@ def create_cover(cover_text, playlist_id):
     img_template_path = os.path.join(config.basedir, "templates", config.COVER_TEMPLATE)
     img = Image.open(img_template_path)
     new_cover = ImageDraw.Draw(img)
-    new_cover.text((100, 2600), cover_text, font_size=200, fill=(255, 255, 255))
+    font = ImageFont.truetype('Arial', 250, encoding='UTF-8')
+    lines = textwrap.wrap(cover_text, width=26)
+    new_cover.multiline_text((100, 2400), '\n'.join(lines), spacing=50,
+                             fill=(255, 255, 255), font=font)
     covers_path = os.path.join(config.basedir, "static", "covers")
     os.makedirs(covers_path, exist_ok=True)
     new_cover_name = playlist_id + ".jpg"
