@@ -3,6 +3,7 @@ import datetime as dt
 import os
 from PIL import Image, ImageDraw, ImageFont
 import requests
+from sys import platform
 import shutil
 import textwrap
 from yt_dlp.utils import DownloadError
@@ -30,7 +31,16 @@ def create_cover(cover_text, playlist_id):
     img_template_path = os.path.join(config.basedir, "templates", config.COVER_TEMPLATE)
     img = Image.open(img_template_path)
     new_cover = ImageDraw.Draw(img)
-    font = ImageFont.truetype('Arial', 250, encoding='UTF-8')
+    match platform:
+        case 'linux':
+            FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+        case 'linux2':
+            FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+        case 'darwin':
+            FONT = '/Library/Fonts/Arial.ttf'
+        case "win32":
+            FONT = 'arial.ttf'
+    font = ImageFont.truetype(FONT, 250, encoding='UTF-8')
     lines = textwrap.wrap(cover_text, width=26)
     new_cover.multiline_text((100, 2400), '\n'.join(lines), spacing=50,
                              fill=(255, 255, 255), font=font)
