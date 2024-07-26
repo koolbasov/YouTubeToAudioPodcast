@@ -1,6 +1,8 @@
 # YouTubeToAudioPodcast
-
 Конвертирует публичный или unlisted YouTube плейлист в аудиоподкаст и предоставляет возможность подписаться по RSS в приложениях для прослушивания подкастов, например iTunes.
+
+Проект создан в рамках учебного курса [Learn Python](https://learn.python.ru/) совместно 
+с [DavydovPa](https://github.com/DavydovPa)
 
 ## Сборка репозитория и локальный запуск
 
