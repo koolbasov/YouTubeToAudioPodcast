@@ -2,8 +2,18 @@
 __pycache__/
 *.py[cod]
 *$py.class
-*.xml
-
+webapp/static/covers
+webapp/static/img/
+webapp/static/podcasts/
+webapp/static/rss
+webapp.db
+data_for_db.txt
+PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.xml
+PLvO-3MXl8QMi98tFRoR0sqdVqOdQYX-9f.html
+YoutubToRSSforTests_1.xml
+YoutubeToRSSforTests_1.xml
+update.sh
+info.txt
 # C extensions
 *.so
 
@@ -12,7 +22,6 @@ __pycache__/
 build/
 develop-eggs/
 dist/
-downloads/
 eggs/
 .eggs/
 lib/

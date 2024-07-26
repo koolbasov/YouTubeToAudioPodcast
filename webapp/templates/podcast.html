@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include('messages.html') %}
+
+
+{% if feed_title %}
+<div>
+    <div class="m-3 p-1">
+    <h2 class="text">{{ feed_title }}</h2>
+        <p><a href="../../static/rss/{{ rss_link }}" class="link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">RSS</a></p>
+    </div>
+</div>
+{% endif %}
+
+{% if podcasts %}
+{% for podcast in podcasts %}
+<div>
+    <div class="container-fluid">
+        <div class="span2 podcast_image">
+            <img src="../../static/img/{{ podcast.ytb_image }}" class="rounded float-start" style="width: 400px;" alt="{{ podcast.podcast_title }}">
+        </div>
+        <div class="span10 m-5 p-1 row mx-md-n5">
+            <h3 class="text-center">{{ podcast.podcast_title }}</h3>
+            <p class="podcast_description">{{ podcast.ytb_description|safe }}</p>
+            <p><a href='../../static/podcasts/{{ podcast.enclosure }}' className='text-decoration-none' class="p-3">
+            <div class="text-center">
+                <button type="button" class="btn btn-outline-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play" viewBox="0 0 16 16">
+                    <path d="M10.804 8 5 4.633v6.734L10.804 8zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696l6.363 3.692z"></path>
+                    </svg>Воспроизвести
+            </button></a>
+                <a href="{{ podcast.ytb_link }}">Смотреть на YouTube</a>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('delete_podcast', podcast_id=podcast.id) }}" class="link-danger p-3">Удалить подкаст</a>
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+    <div class="alert alert-warning d-flex align-items-center m-5 p-1" role="alert">
+      <svg xmlns="http://www.w3.org/2000/svg" style="width: 100px;" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+      </svg>
+        <div>
+          Вы пока не загрузили ни одного подкаста
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
+
