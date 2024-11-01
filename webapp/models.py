@@ -6,28 +6,26 @@ db = SQLAlchemy()
 
 
 class Feed(db.Model):
-    __tablename__ = 'feed'
+    __tablename__ = "feed"
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     feed_title = db.Column(db.String, nullable=False)
     feed_link = db.Column(db.String, unique=True, nullable=False)
-    lang_id = db.Column(db.Integer, db.ForeignKey('languages.id'))
+    lang_id = db.Column(db.Integer, db.ForeignKey("languages.id"))
     feed_description = db.Column(db.String)
     feed_pubDate = db.Column(db.DateTime, nullable=False)
     lastBuildDate = db.Column(db.DateTime, nullable=False)
     feed_image = db.Column(db.String, nullable=False)
-    my_podcast = db.relationship("Podcast", back_populates="my_playlist",
-                                 cascade='all, delete, delete-orphan')
+    my_podcast = db.relationship("Podcast", back_populates="my_playlist", cascade="all, delete, delete-orphan")
 
     def __repr__(self):
-        return '<Feed {}>'.format(self.feed_title, self.feed_link)
+        return f"<Feed {self.feed_title} {self.feed_link}>"
 
 
 class Podcast(db.Model):
-    __tablename__ = 'podcast'
+    __tablename__ = "podcast"
     id = db.Column(db.Integer, primary_key=True)
-    feed_id = db.Column(db.Integer,
-                        db.ForeignKey('feed.id', ondelete='CASCADE'))
+    feed_id = db.Column(db.Integer, db.ForeignKey("feed.id", ondelete="CASCADE"))
     podcast_title = db.Column(db.String, nullable=False)
     ytb_link = db.Column(db.String, unique=True, nullable=False)
     ytb_description = db.Column(db.String)
@@ -40,11 +38,11 @@ class Podcast(db.Model):
     my_playlist = db.relationship("Feed", back_populates="my_podcast")
 
     def __repr__(self):
-        return '<Podcast {}>'.format(self.ytb_link, self.podcast_title)
+        return f"<Podcast link={self.ytb_link} title={self.podcast_title}>"
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'user'
+    __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String(128))
@@ -59,17 +57,17 @@ class User(db.Model, UserMixin):
 
     @property
     def is_admin(self):
-        return self.role == 'admin'
+        return self.role == "admin"
 
     def __repr__(self):
-        return "<User name={} id={}>".format(self.username, self.id)
+        return f"<User name={self.username} id={self.id}>"
 
 
 class Language(db.Model):
-    __tablename__ = 'languages'
+    __tablename__ = "languages"
     id = db.Column(db.Integer, primary_key=True)
     language = db.Column(db.String, nullable=False)
     identifier = db.Column(db.String, unique=True, nullable=False)
 
     def __repr__(self):
-        return '<Language {}>'.format(self.language)
+        return f"<Language {self.language}>"
