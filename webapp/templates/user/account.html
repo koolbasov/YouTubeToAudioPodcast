@@ -5,7 +5,7 @@
     {% include('messages.html') %}
     <div class='d-flex justify-content-end'>
         <div class="col-4">
-            <form action="{{ url_for('account') }}" method="POST">
+            <form action="{{ url_for('user.account') }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="mb-3">
                     <label for="login" class="form-label">Логин</label>

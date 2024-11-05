@@ -1,4 +1,4 @@
-from webapp.models import db, Language
+from webapp.podcast.models import db, Language
 
 languages = {
     "English": "en",

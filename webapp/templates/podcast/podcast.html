@@ -27,7 +27,7 @@
             <p><a href='../../static/podcasts/{{ podcast.enclosure }}' class="p-1">Воспроизвести</button></a></p>
             <p><a href="{{ podcast.ytb_link }}" class="link-warning p-1">Смотреть на YouTube</a></p>
             {% if current_user.is_authenticated %}
-            <p><a href="{{ url_for('delete_podcast', podcast_id=podcast.id) }}" class="link-danger p-1">Удалить подкаст</a></p>
+            <p><a href="{{ url_for('podcast.delete_podcast', podcast_id=podcast.id) }}" class="link-danger p-1">Удалить подкаст</a></p>
             {% endif %}
           </div>
         </div>

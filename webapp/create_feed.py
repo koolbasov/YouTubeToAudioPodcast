@@ -2,7 +2,7 @@ import os
 from feedgen.feed import FeedGenerator
 import pytz
 
-from webapp.models import Feed, Podcast, Language
+from webapp.podcast.models import Feed, Podcast, Language
 from webapp import config
 
 

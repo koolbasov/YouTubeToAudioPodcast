@@ -10,25 +10,25 @@
         <li class="nav-item">
           {% if current_user.is_authenticated %}
               <li class="nav-item">
-                  <a href="{{ url_for('main') }}" class="nav-link">мои подкасты</a>
+                  <a href="{{ url_for('podcast.main') }}" class="nav-link">мои подкасты</a>
               </li>
               <li class="nav-item">
-                  <a href="{{ url_for('account') }}" class="nav-link">{{ current_user.username }}</a>
+                  <a href="{{ url_for('user.account') }}" class="nav-link">{{ current_user.username }}</a>
               </li>
               {% if current_user.is_admin %}
               <li class="nav-item">
-                  <a href="{{ url_for('admin_index') }}" class="nav-link">Панель управления</a>
+                  <a href="{{ url_for('admin.admin') }}" class="nav-link">Панель управления</a>
               </li>
-                {% endif %}
+          {% endif %}
               <li class="nav-item">
-                    <a class="btn btn-outline-light me-2" href="{{ url_for('logout') }}" role="button">ВЫЙТИ</a>
+                    <a class="btn btn-outline-light me-2" href="{{ url_for('user.logout') }}" role="button">ВЫЙТИ</a>
               </li>
           {% else %}
               <li class="nav-item">
-                    <a class="btn btn-outline-light me-2" href="{{ url_for('login') }}" role="button">ВОЙТИ</a>
+                    <a class="btn btn-outline-light me-2" href="{{ url_for('user.login') }}" role="button">ВОЙТИ</a>
               </li>
               <li class="nav-item">
-                    <a class="btn btn-warning" href="{{ url_for('register') }}" role="button">РЕГИСТРАЦИЯ</a>
+                    <a class="btn btn-warning" href="{{ url_for('user.register') }}" role="button">РЕГИСТРАЦИЯ</a>
               </li>
           {% endif %}
       </ul>

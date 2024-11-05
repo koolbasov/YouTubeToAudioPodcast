@@ -1,5 +1,5 @@
 from webapp import create_app
-from webapp.models import Feed
+from webapp.podcast.models import Feed
 from webapp.create_feed import feed_generator
 from webapp.get_xml_html import get_html_from_youtube
 from webapp.parser_to_db import parse_fields_for_data_base
