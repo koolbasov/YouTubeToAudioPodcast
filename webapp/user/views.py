@@ -83,8 +83,7 @@ def account():
         db.session.commit()
         flash("Данные успешно сохранены")
         return redirect(url_for("user.account"))
-    else:
-        for field, errors in form.errors.items():
-            for error in errors:
-                flash(f'Ошибка в поле "{getattr(form, field).label.text}": {error}')
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(f'Ошибка в поле "{getattr(form, field).label.text}": {error}')
     return render_template("user/account.html", page_title=title, form=form, username=username, email=email)

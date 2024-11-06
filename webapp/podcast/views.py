@@ -3,6 +3,12 @@ from flask_login import current_user, login_required
 
 from webapp.db import db
 from webapp.podcast.models import Feed, Podcast
+from webapp.podcast.utils import (
+    delete_podcast_episode,
+    delete_podcast_episode_image,
+    delete_podcast_feed_image,
+    delete_podcast_feed_rss,
+)
 from webapp.podcast.parser.create_feed import feed_generator
 from webapp.podcast.parser.get_xml_html import get_html_from_youtube
 from webapp.podcast.parser.parser_to_db import parse_fields_for_data_base
@@ -33,7 +39,13 @@ def main():
 @login_required
 def delete_playlist(playlist_id):
     playlist = Feed.query.filter_by(id=playlist_id).first()
-    flash(f"Вы удалили плейлист  {playlist.feed_title}")
+    podcasts_to_delete = Podcast.query.filter_by(feed_id=playlist_id).all()
+    flash(f"Вы удалили плейлист {playlist.feed_title}")
+    for podcast_episode in podcasts_to_delete:
+        delete_podcast_episode(podcast_episode.enclosure)
+        delete_podcast_episode_image(podcast_episode.ytb_image)
+    delete_podcast_feed_image(playlist.feed_image)
+    delete_podcast_feed_rss(playlist.feed_link)
     db.session.delete(playlist)
     db.session.commit()
     return redirect(url_for("podcast.main"))
@@ -55,11 +67,10 @@ def process_download():
             feed_link_data, playlist_xml, playlist_html, playlist_id, language_data, user_id_data
         )
         return redirect(url_for("podcast.main"))
-    else:
-        for field, errors in form.errors.items():
-            for error in errors:
-                flash(f'Ошибка в поле "{getattr(form, field).label.text}": {error}')
-        return redirect(url_for("podcast.main"))
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(f'Ошибка в поле "{getattr(form, field).label.text}": {error}')
+    return redirect(url_for("podcast.main"))
 
 
 @blueprint.route("/podcast/<int:podcast_id>")
@@ -82,7 +93,11 @@ def podcast(podcast_id):
 def delete_podcast(podcast_id):
     podcast_to_delete = Podcast.query.filter_by(id=podcast_id).first()
     playlist_id = podcast_to_delete.feed_id
+    file_name = podcast_to_delete.enclosure
+    image_name = podcast_to_delete.ytb_image
     flash(f"Вы удалили подкаст: {podcast_to_delete.podcast_title}")
     db.session.delete(podcast_to_delete)
     db.session.commit()
+    delete_podcast_episode(file_name)
+    delete_podcast_episode_image(image_name)
     return redirect(url_for("podcast.podcast", podcast_id=playlist_id))

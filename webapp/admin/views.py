@@ -12,5 +12,4 @@ def admin():
     if current_user.is_admin:
         title = "YouTubeToAudioPodcast | Панель управления"
         return render_template("admin/admin.html", page_title=title)
-    else:
-        return "У вас нет прав администратора"
+    return "У вас нет прав администратора"
