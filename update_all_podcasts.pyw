@@ -1,8 +1,8 @@
 from webapp import create_app
 from webapp.podcast.models import Feed
-from webapp.create_feed import feed_generator
-from webapp.get_xml_html import get_html_from_youtube
-from webapp.parser_to_db import parse_fields_for_data_base
+from webapp.podcast.parser.create_feed import feed_generator
+from webapp.podcast.parser.get_xml_html import get_html_from_youtube
+from webapp.podcast.parser.parser_to_db import parse_fields_for_data_base
 
 
 app = create_app()

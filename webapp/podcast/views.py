@@ -3,10 +3,10 @@ from flask_login import current_user, login_required
 
 from webapp.db import db
 from webapp.podcast.models import Feed, Podcast
-from webapp.create_feed import feed_generator
-from webapp.get_xml_html import get_html_from_youtube
-from webapp.parser_to_db import parse_fields_for_data_base
-from webapp.languages_for_db import languages_for_form
+from webapp.podcast.parser.create_feed import feed_generator
+from webapp.podcast.parser.get_xml_html import get_html_from_youtube
+from webapp.podcast.parser.parser_to_db import parse_fields_for_data_base
+from webapp.utils import languages_for_form
 from webapp.podcast.forms import DownloadFeedForm
 
 blueprint = Blueprint("podcast", __name__)

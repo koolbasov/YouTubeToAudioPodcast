@@ -8,9 +8,10 @@ import shutil
 import textwrap
 from yt_dlp.utils import DownloadError
 
-from webapp import config, converter_mp3
+from webapp import config
 from webapp.db import db
 from webapp.podcast.models import Feed, Podcast
+from webapp.podcast.parser import converter_mp3
 
 
 def image_download(image_url, image_prefix):
