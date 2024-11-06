@@ -5,7 +5,7 @@
 {% include('messages.html') %}
 <div class="m-5 p-1">
     <div class="form-floating mb-3">
-        <form action="{{ url_for('process_download') }}" method="POST">
+        <form action="{{ url_for('podcast.process_download') }}" method="POST">
                 {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.feed_link.label }}
@@ -36,7 +36,7 @@
     <div class="m-5 p-1">
       <div class="p-3 bg-info bg-opacity-10 border border-secondary border-start-0 rounded-end">
         <div class="text-center">
-        <p><a href="{{ url_for('podcast', podcast_id=playlist.id) }}" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ playlist.feed_title }}</a></p>
+        <p><a href="{{ url_for('podcast.podcast', podcast_id=playlist.id) }}" class="h4 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">{{ playlist.feed_title }}</a></p>
         </div>
           <div class="container-fluid">
             <div class="d-flex align-items-stretch">
@@ -48,7 +48,7 @@
                         <div class="m-5 p-1 float-end">
                           <p><a href="{{ playlist.feed_link }}">Смотреть на YouTube</a>
                           <a href="static/rss/{{ rss_link }}" class="p-3 link-warning link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Скопировать RSS</a>
-                          <a href="{{ url_for('delete_playlist', playlist_id=playlist.id) }}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Удалить плейлист</a></p>
+                          <a href="{{ url_for('podcast.delete_playlist', playlist_id=playlist.id) }}" class="link-danger link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Удалить плейлист</a></p>
                         </div>
                   </div>
               </div>
