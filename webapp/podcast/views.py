@@ -38,17 +38,24 @@ def main():
 @blueprint.route("/delete_playlist/<int:playlist_id>")
 @login_required
 def delete_playlist(playlist_id):
-    playlist = Feed.query.filter_by(id=playlist_id).first()
-    podcasts_to_delete = Podcast.query.filter_by(feed_id=playlist_id).all()
-    flash(f"Вы удалили плейлист {playlist.feed_title}")
-    for podcast_episode in podcasts_to_delete:
-        delete_podcast_episode(podcast_episode.enclosure)
-        delete_podcast_episode_image(podcast_episode.ytb_image)
-    delete_podcast_feed_image(playlist.feed_image)
-    delete_podcast_feed_rss(playlist.feed_link)
-    db.session.delete(playlist)
-    db.session.commit()
-    return redirect(url_for("podcast.main"))
+    try:
+        playlist = Feed.query.filter_by(id=playlist_id).first()
+        if playlist.user_id == current_user.id:
+            podcasts_to_delete = Podcast.query.filter_by(feed_id=playlist_id).all()
+            flash(f"Вы удалили плейлист {playlist.feed_title}")
+            for podcast_episode in podcasts_to_delete:
+                delete_podcast_episode(podcast_episode.enclosure)
+                delete_podcast_episode_image(podcast_episode.ytb_image)
+            delete_podcast_feed_image(playlist.feed_image)
+            delete_podcast_feed_rss(playlist.feed_link)
+            db.session.delete(playlist)
+            db.session.commit()
+            return redirect(url_for("podcast.main"))
+        flash("Вы не можете удалить этот плейлист")
+        return redirect(url_for("podcast.main"))
+    except AttributeError:
+        flash("Такого плейлиста не существует")
+        return redirect(url_for("podcast.main"))
 
 
 @blueprint.route("/download", methods=["POST"])
@@ -79,9 +86,15 @@ def podcast(podcast_id):
     try:
         my_podcasts = Podcast.query.filter(Podcast.feed_id == podcast_id).all()
         feed_title = Feed.query.filter(Feed.id == podcast_id).first().feed_title
+        feed_user_id = Feed.query.filter(Feed.id == podcast_id).first().user_id
         rss_link = feed_generator(podcast_id)
         return render_template(
-            "podcast/podcast.html", page_title=title, feed_title=feed_title, podcasts=my_podcasts, rss_link=rss_link
+            "podcast/podcast.html",
+            page_title=title,
+            feed_title=feed_title,
+            podcasts=my_podcasts,
+            rss_link=rss_link,
+            feed_user_id=feed_user_id,
         )
     except AttributeError:
         flash("Такого подкаста еще не загружено или он был удален")
@@ -92,12 +105,24 @@ def podcast(podcast_id):
 @login_required
 def delete_podcast(podcast_id):
     podcast_to_delete = Podcast.query.filter_by(id=podcast_id).first()
-    playlist_id = podcast_to_delete.feed_id
-    file_name = podcast_to_delete.enclosure
-    image_name = podcast_to_delete.ytb_image
-    flash(f"Вы удалили подкаст: {podcast_to_delete.podcast_title}")
-    db.session.delete(podcast_to_delete)
-    db.session.commit()
-    delete_podcast_episode(file_name)
-    delete_podcast_episode_image(image_name)
-    return redirect(url_for("podcast.podcast", podcast_id=playlist_id))
+    try:
+        podcast_feed = Feed.query.filter_by(id=podcast_to_delete.feed_id).first()
+    except AttributeError:
+        flash("Такого подкаста еще не загружено или он был удален")
+        return redirect(url_for("podcast.main"))
+    if podcast_feed.user_id == current_user.id:
+        try:
+            playlist_id = podcast_to_delete.feed_id
+            file_name = podcast_to_delete.enclosure
+            image_name = podcast_to_delete.ytb_image
+            flash(f"Вы удалили подкаст: {podcast_to_delete.podcast_title}")
+            db.session.delete(podcast_to_delete)
+            db.session.commit()
+            delete_podcast_episode(file_name)
+            delete_podcast_episode_image(image_name)
+            return redirect(url_for("podcast.podcast", podcast_id=playlist_id))
+        except AttributeError:
+            flash("Такого подкаста не существует")
+            return redirect(url_for("podcast.main"))
+    flash("Вы не можете удалить этот подкаст")
+    return redirect(url_for("podcast.main"))
