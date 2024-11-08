@@ -6,14 +6,15 @@ import os
 from webapp import config
 
 
-def download_and_convert_podcast(video_url, video_id, feed_title, genre="Podcast"):
+def download_and_convert_podcast(
+    video_url: str, video_id: str, feed_title: str, genre: str = "Podcast"
+) -> tuple[int, str]:
     mp3_name = video_id + ".mp3"
-    download_path = os.path.join(config.basedir, "static", "podcasts")
-    mp3_path = os.path.join(download_path, mp3_name)
+    mp3_path = os.path.join(config.podcastdir, mp3_name)
     download_options = {
         "quiet": True,
         "format": "bestaudio/best",
-        "outtmpl": os.path.join(download_path, video_id),
+        "outtmpl": os.path.join(config.podcastdir, video_id),
         "nocheckcertificate": True,
         "addmetadata": True,
         "postprocessors": [

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError
 
-from webapp.podcast.parser.get_xml_html import get_html_from_youtube
+from webapp.podcast.parser.get_xml_html import is_valid_playlist
 
 
 class DownloadFeedForm(FlaskForm):
@@ -19,5 +19,5 @@ class DownloadFeedForm(FlaskForm):
             raise ValidationError("Похоже это не ссылка на YouTube")
         if not is_playlist:
             raise ValidationError("Похоже это не плейлист")
-        if not get_html_from_youtube(feed_link.data):
+        if not is_valid_playlist(feed_link.data):
             raise ValidationError("Похоже вы пытаетесь загрузить private плейлист")

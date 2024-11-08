@@ -10,7 +10,11 @@ from webapp.podcast.utils import (
     delete_podcast_feed_rss,
 )
 from webapp.podcast.parser.create_feed import feed_generator
-from webapp.podcast.parser.get_xml_html import get_html_from_youtube
+from webapp.podcast.parser.get_xml_html import (
+    get_html_from_youtube,
+    get_xml_from_youtube,
+    get_url_id_from_youtube_link,
+)
 from webapp.podcast.parser.parser_to_db import parse_fields_for_data_base
 from webapp.utils import languages_for_form
 from webapp.podcast.forms import DownloadFeedForm
@@ -35,7 +39,7 @@ def main():
     )
 
 
-@blueprint.route("/delete_playlist/<int:playlist_id>")
+@blueprint.route("/delete_playlist/<int:playlist_id>", methods=["GET"])
 @login_required
 def delete_playlist(playlist_id):
     try:
@@ -58,7 +62,7 @@ def delete_playlist(playlist_id):
         return redirect(url_for("podcast.main"))
 
 
-@blueprint.route("/download", methods=["POST"])
+@blueprint.route("/download", methods=["GET", "POST"])
 @login_required
 def process_download():
     languages_set = languages_for_form()
@@ -68,7 +72,9 @@ def process_download():
         feed_link_data = form.feed_link.data
         language_data = form.language.data
         user_id_data = current_user.id
-        playlist_xml, playlist_html, playlist_id = get_html_from_youtube(feed_link_data)
+        playlist_id = get_url_id_from_youtube_link(feed_link_data)
+        playlist_xml = get_xml_from_youtube(feed_link_data)
+        playlist_html = get_html_from_youtube(feed_link_data)
         flash("Ваш плейлист загружен")
         parse_fields_for_data_base(
             feed_link_data, playlist_xml, playlist_html, playlist_id, language_data, user_id_data
