@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import current_user, login_required
+from werkzeug import Response
 
 from webapp.db import db
 from webapp.podcast.models import Feed, Podcast
@@ -15,7 +16,7 @@ from webapp.podcast.parser.get_xml_html import (
     get_xml_from_youtube,
     get_url_id_from_youtube_link,
 )
-from webapp.podcast.parser.parser_to_db import parse_fields_for_data_base
+from webapp.podcast.parser.parser_to_db import download_and_save_all_feed_data
 from webapp.utils import languages_for_form
 from webapp.podcast.forms import DownloadFeedForm
 
@@ -24,7 +25,7 @@ blueprint = Blueprint("podcast", __name__)
 
 @blueprint.route("/home")
 @login_required
-def main():
+def main() -> str:
     languages_set = languages_for_form()
     form = DownloadFeedForm()
     form.language.choices = languages_set
@@ -41,7 +42,7 @@ def main():
 
 @blueprint.route("/delete_playlist/<int:playlist_id>", methods=["GET"])
 @login_required
-def delete_playlist(playlist_id):
+def delete_playlist(playlist_id: int) -> Response:
     try:
         playlist = Feed.query.filter_by(id=playlist_id).first()
         if playlist.user_id == current_user.id:
@@ -64,7 +65,7 @@ def delete_playlist(playlist_id):
 
 @blueprint.route("/download", methods=["GET", "POST"])
 @login_required
-def process_download():
+def process_download() -> Response:
     languages_set = languages_for_form()
     form = DownloadFeedForm()
     form.language.choices = languages_set
@@ -76,7 +77,7 @@ def process_download():
         playlist_xml = get_xml_from_youtube(feed_link_data)
         playlist_html = get_html_from_youtube(feed_link_data)
         flash("Ваш плейлист загружен")
-        parse_fields_for_data_base(
+        download_and_save_all_feed_data(
             feed_link_data, playlist_xml, playlist_html, playlist_id, language_data, user_id_data
         )
         return redirect(url_for("podcast.main"))
@@ -87,7 +88,7 @@ def process_download():
 
 
 @blueprint.route("/podcast/<int:podcast_id>")
-def podcast(podcast_id):
+def podcast(podcast_id: int) -> str | Response:
     title = "YouTubeToAudioPodcast | подкаст"
     try:
         my_podcasts = Podcast.query.filter(Podcast.feed_id == podcast_id).all()
@@ -109,7 +110,7 @@ def podcast(podcast_id):
 
 @blueprint.route("/delete_podcast/<int:podcast_id>", methods=["GET"])
 @login_required
-def delete_podcast(podcast_id):
+def delete_podcast(podcast_id: int) -> Response:
     podcast_to_delete = Podcast.query.filter_by(id=podcast_id).first()
     try:
         podcast_feed = Feed.query.filter_by(id=podcast_to_delete.feed_id).first()

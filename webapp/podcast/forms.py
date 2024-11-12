@@ -12,7 +12,7 @@ class DownloadFeedForm(FlaskForm):
     language = SelectField("Выберите язык", validators=[DataRequired()], render_kw={"class": "form-control"})
     submit = SubmitField("Загрузить плейлист", render_kw={"class": "btn btn-warning"})
 
-    def validate_feed_link(self, feed_link):
+    def validate_feed_link(self, feed_link: StringField) -> ValidationError:
         is_youtube = "youtu.be" in feed_link.data or "youtube.com" in feed_link.data
         is_playlist = "playlist" in feed_link.data
         if not is_youtube:

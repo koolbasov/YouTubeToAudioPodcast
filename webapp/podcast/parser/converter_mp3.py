@@ -29,13 +29,13 @@ def download_and_convert_podcast(
     with yt_dlp.YoutubeDL(download_options) as dl:
         if not os.path.exists(mp3_path):
             dl.download([video_url])
-            metatag = EasyID3(mp3_path)
+            metatag = EasyID3(mp3_path)  # type: ignore
             metatag["genre"] = genre
             metatag["album"] = feed_title
             metatag.save()
-            audio = MP3(mp3_path)
-            duration = int(audio.info.length)
+            audio = MP3(mp3_path)  # type: ignore
+            duration = int(audio.info.length)  # type: ignore
         else:
-            audio = MP3(mp3_path)
-            duration = int(audio.info.length)
+            audio = MP3(mp3_path)  # type: ignore
+            duration = int(audio.info.length)  # type: ignore
     return duration, mp3_name

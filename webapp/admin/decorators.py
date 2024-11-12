@@ -4,9 +4,9 @@ from flask import current_app, flash, request, redirect, url_for
 from flask_login import config, current_user
 
 
-def admin_required(func):
+def admin_required(func):  # type: ignore
     @wraps(func)
-    def decorated_view(*args, **kwargs):
+    def decorated_view(*args, **kwargs):  # type: ignore
         if request.method in config.EXEMPT_METHODS:
             return func(*args, **kwargs)
         elif current_app.config.get("LOGIN_DISABLED"):

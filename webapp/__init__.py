@@ -8,7 +8,7 @@ from webapp.podcast.views import blueprint as podcast_blueprint
 from webapp.user.views import blueprint as user_blueprint
 
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__, static_folder="static")
     app.config.from_pyfile("config.py")
     db.init_app(app)
@@ -21,16 +21,16 @@ def create_app():
     app.register_blueprint(user_blueprint)
 
     @login_manager.user_loader
-    def load_user(user_id):
+    def load_user(user_id: int) -> User:
         return User.query.get(user_id)
 
     @app.route("/")
-    def index():
+    def index() -> str:
         title = "YouTubeToAudioPodcast"
         return render_template("index.html", page_title=title)
 
     @app.errorhandler(404)
-    def page_not_found(e):
+    def page_not_found(error: Exception) -> tuple[str, int]:
         title = "YouTubeToAudioPodcast | 404 страница не найдена"
         return render_template("404.html", page_title=title), 404
 
