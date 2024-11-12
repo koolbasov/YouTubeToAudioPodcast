@@ -141,7 +141,14 @@ def download_and_save_all_feed_data(
 
         feed_image = create_cover(feed_title, playlist_id)  # type: ignore
         feed_id = save_feed(
-            db_user_id, feed_title, feed_link, db_language, feed_description, feed_pubDate, lastBuildDate, feed_image  # type: ignore
+            db_user_id,
+            feed_title,  # type: ignore
+            feed_link,
+            db_language,
+            feed_description,  # type: ignore
+            feed_pubDate,
+            lastBuildDate,
+            feed_image,
         )
 
         # Fields for podcast
@@ -155,7 +162,9 @@ def download_and_save_all_feed_data(
             pubDate = datetime.datetime.strptime(pubDate, config.TIME_FORMAT_YOUTUBE)
             ytb_author = item.find("author").text.strip()
             try:
-                duration, enclosure = converter_mp3.download_and_convert_podcast(ytb_link, ytb_podcast_id, feed_title)  # type: ignore
+                duration, enclosure = converter_mp3.download_and_convert_podcast(
+                    ytb_link, ytb_podcast_id, feed_title  # type: ignore
+                )
             except DownloadError:
                 duration = 0
                 enclosure = None
