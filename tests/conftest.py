@@ -1,6 +1,5 @@
 import os
 import pytest
-import time
 
 from webapp import config
 
