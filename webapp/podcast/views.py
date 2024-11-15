@@ -43,24 +43,23 @@ def main() -> str:
 @blueprint.route("/delete_playlist/<int:playlist_id>", methods=["GET"])
 @login_required
 def delete_playlist(playlist_id: int) -> Response:
-    try:
-        playlist = Feed.query.filter_by(id=playlist_id).first()
-        if playlist.user_id == current_user.id:
-            podcasts_to_delete = Podcast.query.filter_by(feed_id=playlist_id).all()
-            flash(f"Вы удалили плейлист {playlist.feed_title}")
-            for podcast_episode in podcasts_to_delete:
-                delete_podcast_episode(podcast_episode.enclosure)
-                delete_podcast_episode_image(podcast_episode.ytb_image)
-            delete_podcast_feed_image(playlist.feed_image)
-            delete_podcast_feed_rss(playlist.feed_link)
-            db.session.delete(playlist)
-            db.session.commit()
-            return redirect(url_for("podcast.main"))
-        flash("Вы не можете удалить этот плейлист")
-        return redirect(url_for("podcast.main"))
-    except AttributeError:
+    playlist = Feed.query.filter_by(id=playlist_id).first()
+    if not playlist:
         flash("Такого плейлиста не существует")
         return redirect(url_for("podcast.main"))
+    if playlist.user_id == current_user.id:
+        podcasts_to_delete = Podcast.query.filter_by(feed_id=playlist_id).all()
+        flash(f"Вы удалили плейлист {playlist.feed_title}")
+        for podcast_episode in podcasts_to_delete:
+            delete_podcast_episode(podcast_episode.enclosure)
+            delete_podcast_episode_image(podcast_episode.ytb_image)
+        delete_podcast_feed_image(playlist.feed_image)
+        delete_podcast_feed_rss(playlist.feed_link)
+        db.session.delete(playlist)
+        db.session.commit()
+        return redirect(url_for("podcast.main"))
+    flash("Вы не можете удалить этот плейлист")
+    return redirect(url_for("podcast.main"))
 
 
 @blueprint.route("/download", methods=["GET", "POST"])
