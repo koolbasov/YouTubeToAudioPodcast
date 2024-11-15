@@ -21,12 +21,12 @@ class RegistrationForm(FlaskForm):
     )
     submit = SubmitField("Зарегистрироваться", render_kw={"class": "btn btn-warning"})
 
-    def validate_username(self, username):
+    def validate_username(self, username: StringField) -> ValidationError:
         users_count = User.query.filter_by(username=username.data).count()
         if users_count > 0:
             raise ValidationError("Пользователь с таким именем уже зарегистрирован")
 
-    def validate_email(self, email):
+    def validate_email(self, email: StringField) -> ValidationError:
         users_count = User.query.filter_by(email=email.data).count()
         if users_count > 0:
             raise ValidationError("Пользователь с такой электронной почтой уже зарегистрирован")

@@ -2,6 +2,17 @@ from datetime import timedelta
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+podcastdir = os.path.join(basedir, "static", "podcasts")
+podcastimagedir = os.path.join(basedir, "static", "img")
+feedimagedir = os.path.join(basedir, "static", "covers")
+rssfilesdir = os.path.join(basedir, "static", "rss")
+headers = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/126.0.0.0 Safari/537.36"
+    )
+}
 
 LANGUAGES = {
     "English": "en",

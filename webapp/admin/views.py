@@ -8,7 +8,7 @@ blueprint = Blueprint("admin", __name__, url_prefix="/admin")
 
 @blueprint.route("/")
 @admin_required
-def admin():
+def admin() -> str:
     if current_user.is_admin:
         title = "YouTubeToAudioPodcast | Панель управления"
         return render_template("admin/admin.html", page_title=title)

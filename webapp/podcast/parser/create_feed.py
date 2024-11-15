@@ -6,7 +6,7 @@ from webapp.podcast.models import Feed, Podcast, Language
 from webapp import config
 
 
-def feed_generator(feed_id):
+def feed_generator(feed_id: int) -> str:
     fg = FeedGenerator()
     fg.load_extension("podcast")
 
@@ -43,8 +43,7 @@ def feed_generator(feed_id):
     youtube_link = my_feed.feed_link
     url_id = youtube_link.split("list=")[1]
     filename = f"{url_id}.xml"
-    file_folder = os.path.join(config.basedir, "static", "rss")
-    os.makedirs(file_folder, exist_ok=True)
-    file_path = os.path.join(file_folder, filename)
+    os.makedirs(config.rssfilesdir, exist_ok=True)
+    file_path = os.path.join(config.rssfilesdir, filename)
     fg.rss_file(file_path)
     return filename

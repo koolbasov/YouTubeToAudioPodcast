@@ -4,7 +4,7 @@ from flask import request
 from webapp.podcast.models import db, Language
 
 
-def add_languages_to_db(languages):
+def add_languages_to_db(languages: dict[str, str]) -> None:
     for language_name, short_name in languages.items():
         language_exists = Language.query.filter(Language.identifier == short_name).count()
         if not language_exists:
@@ -13,7 +13,7 @@ def add_languages_to_db(languages):
             db.session.commit()
 
 
-def languages_for_form():
+def languages_for_form() -> list[tuple[int, str]]:
     languages_list = Language.query.all()
     languages_set = []
     for language in languages_list:
@@ -21,15 +21,16 @@ def languages_for_form():
     return languages_set
 
 
-def is_safe_url(target):
+def is_safe_url(target: str) -> bool:
     ref_url = urlparse(request.host_url)
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
 
 
-def get_redirect_target():
+def get_redirect_target() -> str | None:
     for target in request.values.get("next"), request.referrer:
         if not target:
             continue
         if is_safe_url(target):
             return target
+    return None

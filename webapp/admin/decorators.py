@@ -1,18 +1,19 @@
+from typing import Callable, Any
 from functools import wraps
 
 from flask import current_app, flash, request, redirect, url_for
 from flask_login import config, current_user
 
 
-def admin_required(func):
+def admin_required(func: Callable) -> Any:
     @wraps(func)
-    def decorated_view(*args, **kwargs):
+    def decorated_view(*args: tuple, **kwargs: dict[str, Any]) -> Any:
         if request.method in config.EXEMPT_METHODS:
             return func(*args, **kwargs)
         elif current_app.config.get("LOGIN_DISABLED"):
             return func(*args, **kwargs)
         elif not current_user.is_authenticated:
-            return current_app.login_manager.unauthorized()
+            return current_app.login_manager.unauthorized()  # type: ignore
         elif not current_user.is_admin:
             flash("Эта страница доступна только админам")
             return redirect(url_for("podcast.main"))

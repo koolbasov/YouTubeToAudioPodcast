@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, flash, redirect, url_for
 from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug import Response
 
 from webapp.db import db
 from webapp.user.forms import RegistrationForm, EditProfile
@@ -10,7 +11,7 @@ blueprint = Blueprint("user", __name__, url_prefix="/users")
 
 
 @blueprint.route("/login")
-def login():
+def login() -> str | Response:
     if current_user.is_authenticated:
         return redirect(url_for("podcast.main"))
     title = "YouTubeToAudioPodcast | Вход"
@@ -19,7 +20,7 @@ def login():
 
 
 @blueprint.route("/process-login", methods=["POST"])
-def process_login():
+def process_login() -> Response:
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
@@ -35,14 +36,14 @@ def process_login():
 
 
 @blueprint.route("/logout")
-def logout():
+def logout() -> Response:
     logout_user()
     flash("Вы успешно разлогинились")
     return redirect(url_for("index"))
 
 
 @blueprint.route("/register")
-def register():
+def register() -> str | Response:
     if current_user.is_authenticated:
         return redirect(url_for("podcast.main"))
     title = "YouTubeToAudioPodcast | Регистрация"
@@ -51,7 +52,7 @@ def register():
 
 
 @blueprint.route("/process-reg", methods=["POST"])
-def process_reg():
+def process_reg() -> Response:
     form = RegistrationForm()
     if form.validate_on_submit():
         new_user = User(username=form.username.data, email=form.email.data, role="user")
@@ -71,7 +72,7 @@ def process_reg():
 
 @blueprint.route("/account", methods=["GET", "POST"])
 @login_required
-def account():
+def account() -> str | Response:
     title = "YouTubeToAudioPodcast | мои данные"
     form = EditProfile()
     username = current_user.username
