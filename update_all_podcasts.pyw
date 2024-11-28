@@ -6,7 +6,7 @@ from webapp.podcast.parser.get_xml_html import (
     get_xml_from_youtube,
     get_url_id_from_youtube_link,
 )
-from webapp.podcast.parser.parser_to_db import parse_fields_for_data_base
+from webapp.podcast.parser.parser_to_db import download_and_save_all_feed_data
 
 
 app = create_app()
@@ -25,5 +25,5 @@ with app.app_context():
         language = feed.lang_id
         user_id = feed.user_id
         if playlist_id and playlist_html and playlist_xml:
-            parse_fields_for_data_base(playlist_url, playlist_xml, playlist_html, playlist_id, language, user_id)
+            download_and_save_all_feed_data(playlist_url, playlist_xml, playlist_html, playlist_id, language, user_id)
             feed_generator(feed_id)
